@@ -57,7 +57,7 @@ class ItemList extends Component {
                 }
             },
             items: [],
-            load: false,
+            load: true,
             count: 0
         }
     }
@@ -66,7 +66,7 @@ class ItemList extends Component {
         search = search.toLowerCase();
 
         let source = "github";
-        fetch(this.state.links[source]["link"] + search + "&page=1&per_page=300")
+        fetch(this.state.links[source]["link"] + search + "&page=1&per_page=280")
         .then(async response => {
             let resData = await response.json();
             

@@ -47,7 +47,7 @@ class App extends Component {
           <div className="search-box">
             <p className="head">
               <code>Z0l0</code>
-              <small> Search open-source projects on github, gitlab and bitbucket at the same time in one place...</small>
+              <small> Search open-source projects on github, gitlab and bitbucket at the same time in one place...<a href="https://github.com/sanix-darker/zolo">[Github-project]</a></small>
               <span className="Author">
                 <a href="github.com/sanix-darker" title="By Sanix-darker">
                   <img alt="" src="https://avatars0.githubusercontent.com/u/22576758?v=4" />
