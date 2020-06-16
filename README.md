@@ -13,9 +13,12 @@ You just have to run :
 yarn install
 ```
 # How to launch
+
 You just have to run :
 ```js
 yarn start
+// The application will be running on 
+// http://localhost:3007 
 ```
 
 ## Author
