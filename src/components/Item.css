@@ -1,0 +1,20 @@
+.Item-Single{
+    width: 20%;
+    text-align: left;
+    box-shadow: 0 4px 9px rgba(0,0,0,0.45);
+    padding: 5px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    color: #282c34;
+    margin: 7px 7px 7px 0px;
+}
+
+.Item-Title{
+    font-size: 22px;
+}
+.Item-Author{
+    color: rgba(190,190,190);
+}
+.Item-Description{
+    font-size: 11px;
+}
