@@ -90,14 +90,18 @@ class ItemList extends Component {
                 resData.map((elt, index) => {
                     const author = source_object["author"].split("|");
                     const author_avatar = source_object["author_avatar"].split("|");
-     
-                     items.push({
+                    let avatar=""; 
+                    if (typeof(elt[author_avatar[0]][author_avatar[1]]) != "undefined" && elt[author_avatar[0]][author_avatar[1]] != null){
+                        avatar = (elt[author_avatar[0]][author_avatar[1]].indexOf("http") == -1) ? "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] : elt[author_avatar[0]][author_avatar[1]];
+                    }
+                    console.log("avatar: ", avatar)
+                    items.push({
                          "index": index,
                          "source": source,
                          "title": elt[source_object["name"]],
                          "url": elt[source_object["html_url"]],
                          "author": elt[author[0]][author[1]],
-                         "author_avatar": "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]],
+                         "author_avatar": avatar,
                          "stars": parseInt(elt[source_object["stars"]]),
                          "forks": elt[source_object["forks"]],
                          "issues": "-",
@@ -105,6 +109,9 @@ class ItemList extends Component {
                          "description": elt[source_object["description"]]
                      });
                });
+
+               // perform a sort
+               items.sort((a, b) => a.stars - b.stars);
                
                this.setState({
                    items: items,
