@@ -1,49 +1,79 @@
+body{
+  background-color: #282c34;
+}
+.App-header {
+  height: 100vh;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  color: white;
+  padding-left: 9%;
+  padding-right: 9%;
+}
+
+.App-link {
+  color: #61dafb;
+}
 
 code{
   font-size: 40px;
 }
+
 small{
   font-size: 12px;
   font-style: italic;
 }
+
 .head{
   text-align: left;
 }
+
 .search-zone{
-  width: 100%;
+  width: 98.3%;
   padding : 15px;
+  font-size: 20px;
   box-shadow : 0 3px 5px rgba(0,0,0,0.35);
   border: 0px;
 }
+
 .search-box{
-  width: 80%;
+  background-color: #282c34;
+  width: 81.5%;
   position: fixed;
   top: 0px;
 }
 
-.Item-List{
-  padding-top: 10%;
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 992px) {
+  .search-box{
+    width: 83.7%;
+  }
+  .search-zone{
+    width: 96%;
+  }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 600px) {
+  small{
+    display: block;
+  }
+  .App-header {
+    padding-left: 1%;
+    padding-right: 1%;
+  }
+  .search-box{
+    width: 100%;
+  }
+  .search-zone{
+    width: 89%;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  height: 100vh;
-  flex-direction: column;
-  align-items: left;
-  justify-content: center;
-  color: white;
-  padding-left : 7%;
-  padding-right : 7%;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 @keyframes App-logo-spin {

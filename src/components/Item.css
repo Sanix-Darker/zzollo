@@ -1,5 +1,6 @@
 .Item-Single{
-    width: 20%;
+    width: 23.8%;
+    min-height: 10em;
     text-align: left;
     box-shadow: 0 4px 9px rgba(0,0,0,0.45);
     padding: 5px;
@@ -7,14 +8,35 @@
     background-color: #ffffff;
     color: #282c34;
     margin: 7px 7px 7px 0px;
+    display: inline-block;
 }
 
 .Item-Title{
-    font-size: 22px;
+    font-size: 20px;
 }
 .Item-Author{
     color: rgba(190,190,190);
 }
 .Item-Description{
     font-size: 11px;
+}
+
+@media screen and (max-width: 1300px) {
+    .Item-Single{
+        width: 43%;
+    }
+}
+
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 992px) {
+    .Item-Single{
+        width: 33%;
+    }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 600px) {
+    .Item-Single{
+        width: 99%;
+    }
 }
