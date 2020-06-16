@@ -43,11 +43,11 @@ const Item = (props) => {
         </table>
       </div>
       <p className="Item-Description">
-        {(props.description.length > 67) ? props.description.substring(0, 67) + "..." : props.description }
+        {(props.description != null) ? ((props.description.length > 67) ? props.description.substring(0, 67) + "..." : props.description) : "No Description here"}
       </p>
 
       <div className="details">
-        <i><b>{props.language}</b>, <b>{props.stars}</b> stars, <b>{props.forks}</b> forks || <b>{props.issues}</b>issues</i>
+        <i><b style={{"fontSize":"15px"}}>{props.language}</b>, <b>{props.stars}</b> stars, <b>{props.forks}</b> forks || <b>{props.issues}</b>issues</i>
       </div>
     </div>
   );
