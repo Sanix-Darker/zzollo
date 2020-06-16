@@ -25,7 +25,21 @@ class ItemList extends Component {
                     "html_url": "html_url",
                     "description": "description"
                 },
-                "gitlab": "",
+                "gitlab": {
+                    "link": "https://gitlab.com/api/v4/projects?search=",
+                    "count": "",
+                    "items": "",
+                    "author": "namespace|name",
+                    "author_avatar": "namespace|avatar_url",
+                    "name": "name",
+                    "full_name": "name_with_namespace",
+                    "stars": "star_count",
+                    "language": "",
+                    "forks": "forks_count",
+                    "issues": "",
+                    "html_url": "web_url",
+                    "description": "description"
+                },
                 "bitbucket": ""
             },
             items: [],
@@ -33,60 +47,88 @@ class ItemList extends Component {
         }
     }
 
-    fetch_projects = (type, search) => {
-
-        fetch(this.state.links[type]["link"] + search)
+    fetch_projects = (search) => {
+        this.setState({ items: [] });
+        
+        let source = "github";
+        fetch(this.state.links[source]["link"] + search)
         .then(async response => {
-            const resData = await response.json();
-
-            // check for error response
-            if (!response.ok) {
-                // get error message from body or default to response statusText
-                const error = (resData && resData.message) || response.statusText;
-                return Promise.reject(error);
-            }
-           
-            const count = resData["total_count"];
-            this.setState({
-             count: this.state.count + count
-            });
-            let items = []
+            let resData = await response.json();
+            
+            let items = [];
  
-            const github = this.state.links[type];
- 
+            let source_object = this.state.links[source];
+            
             resData["items"].map((elt, index) => {
-                const author = github["author"].split("|");
-                const author_avatar = github["author_avatar"].split("|");
+                const author = source_object["author"].split("|");
+                const author_avatar = source_object["author_avatar"].split("|");
  
                  items.push({
                      "index": index,
-                     "title": elt[github["name"]],
-                     "url": elt[github["html_url"]],
+                     "source": source,
+                     "title": elt[source_object["name"]],
+                     "url": elt[source_object["html_url"]],
                      "author": elt[author[0]][author[1]],
-                     "author_avatar":  elt[author_avatar[0]][author_avatar[1]],
-                     "stars": elt[github["stars"]],
-                     "forks": elt[github["forks"]],
-                     "issues": elt[github["issues"]],
-                     "language": elt[github["language"]],
-                     "description": elt[github["description"]]
+                     "author_avatar": elt[author_avatar[0]][author_avatar[1]],
+                     "stars": parseInt(elt[source_object["stars"]]),
+                     "forks": elt[source_object["forks"]],
+                     "issues": elt[source_object["issues"]],
+                     "language": elt[source_object["language"]],
+                     "description": elt[source_object["description"]]
                  });
-                 return true;
-            })
- 
-            this.setState({ items: items }); //this is an asynchronous function
+                 
+            });
+
+            source = "gitlab";
+
+            fetch(this.state.links[source]["link"] + search)
+            .then(async response => {
+                resData = await response.json();
+
+                source_object = this.state.links[source];
+                
+                resData.map((elt, index) => {
+                    const author = source_object["author"].split("|");
+                    const author_avatar = source_object["author_avatar"].split("|");
+     
+                     items.push({
+                         "index": index,
+                         "source": source,
+                         "title": elt[source_object["name"]],
+                         "url": elt[source_object["html_url"]],
+                         "author": elt[author[0]][author[1]],
+                         "author_avatar": "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]],
+                         "stars": parseInt(elt[source_object["stars"]]),
+                         "forks": elt[source_object["forks"]],
+                         "issues": "-",
+                         "language": "-",
+                         "description": elt[source_object["description"]]
+                     });
+               });
+               
+               this.setState({
+                   items: items,
+                   count: items.length
+               });
+            }).catch(error => {
+                this.setState({ errorMessage: error.toString() });
+                console.error('There was an error!', error);
+            });
+
         })
         .catch(error => {
             this.setState({ errorMessage: error.toString() });
             console.error('There was an error!', error);
         });
-;
     }
 
     componentWillReceiveProps = (nextProps) => {
-    
         if (nextProps.go_search === true){
             console.log("Start-Fetching...")
-            this.fetch_projects("github", "reactjs");
+
+            this.fetch_projects("github", nextProps.search);
+        }else{
+            console.log("Text keyword(s)");
         }
     }
 
@@ -99,21 +141,25 @@ class ItemList extends Component {
             <div>
                 <center>
                     <div className="Item-List">
-                        <div style={{"width":"100%", "text-align": "left"}}>
+                        <div style={{"width":"100%", "textAlign": "left"}}>
                             <span>{this.state.count} results.</span>
                         </div>
                         <br/>
-                        {this.state.items.map((elt, index) => {
-                            return (<Item key={index}
-                                            url={elt.url}
-                                            title={elt.title}
-                                            author={elt.author}
-                                            language={elt.language}
-                                            stars={elt.stars}
-                                            issues={elt.issues}
-                                            forks={elt.forks}
-                                            description={elt.description}/>);
-                        })}
+                        <div style={{"display": "flex", "flexWrap": "wrap"}}>
+                            {this.state.items.map((elt, index) => {
+                                return (<Item key={index}
+                                                source={elt.source}
+                                                url={elt.url}
+                                                title={elt.title}
+                                                author={elt.author}
+                                                author_avatar={elt.author_avatar}
+                                                language={elt.language}
+                                                stars={elt.stars}
+                                                issues={elt.issues}
+                                                forks={elt.forks}
+                                                description={elt.description}/>);
+                            })}
+                        </div>
                     </div>
                 </center>
             </div>

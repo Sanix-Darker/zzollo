@@ -1,14 +1,24 @@
 .Item-Single{
     width: 23.8%;
-    min-height: 10em;
+    height: 10em;
     text-align: left;
-    box-shadow: 0 4px 9px rgba(0,0,0,0.45);
+    box-shadow: 0 5px 11px rgba(0,0,0,0.65);
     padding: 5px;
-    border-radius: 2px;
+    border-radius: 5px;
     background-color: #ffffff;
     color: #282c34;
     margin: 7px 7px 7px 0px;
-    display: inline-block;
+
+    z-index: 9;
+    transform: scale(1);
+    transition: 0.7s;
+}
+
+.Item-Single:hover{
+    z-index: 99;
+    transform: scale(1.3);
+    box-shadow: 0 15px 23px rgba(0,0,0,0.7);
+    transition: 0.3s;
 }
 
 .Item-Title{
@@ -21,9 +31,28 @@
     font-size: 11px;
 }
 
+.avatar{
+    width: 2em;
+}
+.details{
+    width: 100%;
+    font-size: 10px;
+    float: right;
+    text-align: right;
+    margin-right: 0.7em;
+
+}
+
+@media screen and (max-width: 1700px) {
+    .Item-Single{
+        width: 32%;
+    }
+}
+
+
 @media screen and (max-width: 1300px) {
     .Item-Single{
-        width: 43%;
+        width: 48%;
     }
 }
 
@@ -31,6 +60,10 @@
 @media screen and (max-width: 992px) {
     .Item-Single{
         width: 33%;
+    }
+    .Item-Single:hover{
+        box-shadow: 0 15px 23px rgba(0,0,0,0.7);
+        transform: scale(1);
     }
 }
 

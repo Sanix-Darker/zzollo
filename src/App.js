@@ -16,14 +16,20 @@ class App extends Component {
 
     if (event.key === 'Enter') {
       console.log('>> Enter have been pressed !!!');
-      this.setState(
-        {
-          go_search: true
-        }
-      );
+      this.setState({go_search: true});
+    }else{
+      this.setState({go_search: false});
     }
 
     this.setState({search: event.target.value});
+  }
+
+  go_search_change(){
+    console.log("Rechange-go_search");
+
+    this.setState({
+      go_search: !this.state.go_search
+    });
   }
 
   search_query = (query) => {
