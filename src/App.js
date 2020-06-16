@@ -61,7 +61,7 @@ class App extends Component {
                     placeholder="Search keyword(s) for open-source project(s)..."
                     />
           </div>
-
+          <br/>
           <ItemList search={this.state.search} go_search={this.state.go_search}/>
         </header>
       </div>
