@@ -9,8 +9,10 @@ class ItemList extends Component {
     constructor() {
         super()
         this.state = {
+            precedent_search: "",
             links: link_selector,
             items: [],
+            items_orig: [],
             load: true,
             count: 0
         }
@@ -51,6 +53,7 @@ class ItemList extends Component {
             this.setState({
                 load: false,
                 items: items,
+                items_orig: items,
                 count: items.length
             });
 
@@ -87,6 +90,7 @@ class ItemList extends Component {
                 this.setState({
                     load: false,
                     items: items,
+                    items_orig: items,
                     count: items.length
                 });
 
@@ -104,11 +108,27 @@ class ItemList extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.go_search === true){
-            this.setState({
-                items: [],
-                load: true
-            });
-            this.fetch_projects(nextProps.search);
+
+            if (nextProps.search !== this.state.precedent_search){
+                this.setState({
+                    items: [],
+                    items_orig: [],
+                    load: true
+                });
+                this.fetch_projects(nextProps.search);
+            }
+
+            if (nextProps.language !== "all"){
+                this.setState({
+                    items: this.state.items_orig.filter(elt => {
+                        return (elt["language"] !== null) ? (elt["language"].toLowerCase() === nextProps.language.toLowerCase()) : null
+                    }),
+                });
+            }else{
+                this.setState({
+                    items: this.state.items_orig
+                });
+            }
         }
     }
 
@@ -120,26 +140,30 @@ class ItemList extends Component {
     render() {
         const loader = (<img src="/loading.gif" alt=""/>);
         let item_list = (<div style={{"display": "flex", "flexWrap": "wrap"}}>
-                            {this.state.items.map((elt, index) => {
-                                return (<Item key={index}
-                                                source={elt.source}
-                                                url={elt.url}
-                                                title={elt.title}
-                                                author={elt.author}
-                                                author_avatar={elt.author_avatar}
-                                                language={elt.language}
-                                                stars={elt.stars}
-                                                issues={elt.issues}
-                                                forks={elt.forks}
-                                                description={elt.description}/>);
-                            })}
+                            {this.state.items.length > 0 ? this.state.items.map((elt, index) => {
+                                                                return (<Item key={index}
+                                                                                source={elt.source}
+                                                                                url={elt.url}
+                                                                                title={elt.title}
+                                                                                author={elt.author}
+                                                                                author_avatar={elt.author_avatar}
+                                                                                language={elt.language}
+                                                                                stars={elt.stars}
+                                                                                issues={elt.issues}
+                                                                                forks={elt.forks}
+                                                                                description={elt.description}/>)
+                                                            }) : (<center><h1>No results found !!!</h1></center>)
+                            }
                         </div>);
         return (
             <div>
                 <center>
                     <div className="Item-List">
                         <div style={{"width":"100%", "textAlign": "left"}}>
-                            <span>[+] Showing bests {this.state.count} results for {this.props.search.length === 0 ? "reactJs": this.props.search}.</span>
+                            <span>[+] Showing bests {this.state.count} results for&nbsp; 
+                                     {this.props.search.length === 0 ? "reactJs": this.props.search}
+                                     &nbsp;{this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
+                            </span>
                         </div>
                         <br/>
                         {this.state.load ? loader : item_list }

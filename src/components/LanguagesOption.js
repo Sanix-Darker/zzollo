@@ -160,6 +160,8 @@ Ioke
 IRC log
 Isabelle
 J
+Java
+JavaScript
 Jade
 Jasmin
 Java Server Pages
@@ -347,8 +349,10 @@ Zimpl`;
 
 const lgs = langs.split("\n");
 let LanguagesOption = [];
+let i = 0;
 for (const lang of lgs){
-    LanguagesOption.push(<option value={lang}>{lang}</option>);
+    i++;
+    LanguagesOption.push(<option key={i} value={lang}>{lang}</option>);
 }
 
 export default LanguagesOption;

@@ -9,6 +9,7 @@ class App extends Component {
     super()
     this.state = {
       search: "",
+      language: "all",
       go_search: false
     }
   }
@@ -16,13 +17,19 @@ class App extends Component {
   handle_change(event){
 
     if (event.key === 'Enter') {
-      console.log('>> Enter have been pressed !!!');
       this.setState({go_search: true});
     }else{
       this.setState({go_search: false});
     }
 
     this.setState({search: event.target.value});
+  }
+
+  handle_change_option(event){
+    this.setState({
+        language: event.target.selectedOptions[0].value,
+        go_search: true
+    });
   }
 
   go_search_change(){
@@ -51,25 +58,30 @@ class App extends Component {
             </p>
 
             <table style={{"width": "100%"}}>
-              <tr>
-                <td style={{"width": "70%"}}>
-                  <input type="text"
-                      className="search-zone"
-                      onKeyDown = {(event) => this.handle_change(event)}
-                      placeholder="Search keyword(s) for open-source project(s)..."
-                      />
-                </td>
-                <td>
-                  <select className="language-zone" style={{"float": "right", "width": "94%"}}>
-                    <option value="all" selected>All language</option>
-                    {LanguagesOption}
-                  </select>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td style={{"width": "70%"}}>
+                    <input type="text"
+                        className="search-zone"
+                        onKeyDown = {(event) => this.handle_change(event)}
+                        placeholder="Search keyword(s) for open-source project(s)..."
+                        />
+                  </td>
+                  <td>
+                    <select className="language-zone"
+                            defaultValue="all"
+                            onChange = {(event) => this.handle_change_option(event)}
+                            style={{"float": "right", "width": "94%"}}>
+                      <option value="all">All language</option>
+                      {LanguagesOption}
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <br/>
-          <ItemList search={this.state.search} go_search={this.state.go_search}/>
+          <ItemList search={this.state.search} language={this.state.language} go_search={this.state.go_search}/>
         </header>
       </div>
     );
