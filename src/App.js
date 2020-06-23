@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ItemList from './components/ItemList';
+import LanguagesOption from './components/LanguagesOption';
 
 class App extends Component {
 
@@ -49,11 +50,23 @@ class App extends Component {
               </span>
             </p>
 
-            <input type="text"
-                    className="search-zone"
-                    onKeyDown = {(event) => this.handle_change(event)}
-                    placeholder="Search keyword(s) for open-source project(s)..."
-                    />
+            <table style={{"width": "100%"}}>
+              <tr>
+                <td style={{"width": "70%"}}>
+                  <input type="text"
+                      className="search-zone"
+                      onKeyDown = {(event) => this.handle_change(event)}
+                      placeholder="Search keyword(s) for open-source project(s)..."
+                      />
+                </td>
+                <td>
+                  <select className="language-zone" style={{"float": "right", "width": "94%"}}>
+                    <option value="all" selected>All language</option>
+                    {LanguagesOption}
+                  </select>
+                </td>
+              </tr>
+            </table>
           </div>
           <br/>
           <ItemList search={this.state.search} go_search={this.state.go_search}/>

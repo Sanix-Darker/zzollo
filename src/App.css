@@ -48,6 +48,16 @@ small{
   border: 0px;
 }
 
+.select-zone{
+  float: right;
+  width: 94%;
+  padding: 18px;
+  border: 0px;
+  background: white;
+  font-size: 20px;
+  box-shadow : 0 3px 5px rgba(0,0,0,0.35);
+}
+
 .search-box{
   z-index: 9999;
   background-color: #282c34;
