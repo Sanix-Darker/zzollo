@@ -48,13 +48,12 @@ class App extends Component {
         <header className="App-header">
           <div className="search-box">
             <p className="head">
-              <code>Z0l0</code>
-              <small> Search open-source projects on github, gitlab and bitbucket in one place...<a href="https://github.com/sanix-darker/zolo">[Github-project]</a></small>
-              <span className="Author">
                 <a href="github.com/sanix-darker" title="By Sanix-darker">
-                  <img alt="" src="https://avatars0.githubusercontent.com/u/22576758?v=4" />
+                  <img alt="" src="https://avatars1.githubusercontent.com/u/22576758?s=60&v=4" style={{"borderRadius": "100%", "width": "2em"}}/>
                 </a>
-              </span>
+                <a href="/" style={{"color": "white", "textDecoration": "none"}}><code>Z0l0</code></a>
+              <small> Search open-source projects on github, gitlab and bitbucket.
+              <a href="https://github.com/sanix-darker/zolo" style={{"color": "white", "float":"right", "textDecoration": "none"}}>[Github-project-link]</a></small>
             </p>
 
             <table style={{"width": "100%"}}>
@@ -72,7 +71,7 @@ class App extends Component {
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event)}
                             style={{"float": "right", "width": "94%"}}>
-                      <option value="all">All language</option>
+                      <option value="all">All languages</option>
                       {LanguagesOption}
                     </select>
                   </td>
