@@ -46,10 +46,12 @@ small{
   font-size: 20px;
   box-shadow : 0 3px 5px rgba(0,0,0,0.35);
   border: 0px;
+  margin-left: -0.2em;
 }
 
 .language-zone{
   float: right;
+  margin-right: 0.2em;
   width: 94%;
   padding: 15px;
   border: 0px;

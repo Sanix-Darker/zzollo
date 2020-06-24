@@ -69,8 +69,7 @@ class App extends Component {
                   <td>
                     <select className="language-zone"
                             defaultValue="all"
-                            onChange = {(event) => this.handle_change_option(event)}
-                            style={{"float": "right", "width": "94%"}}>
+                            onChange = {(event) => this.handle_change_option(event)}>
                       <option value="all">All languages</option>
                       {LanguagesOption}
                     </select>
