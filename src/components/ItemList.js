@@ -111,6 +111,7 @@ class ItemList extends Component {
 
             if (nextProps.search !== this.state.precedent_search){
                 this.setState({
+                    precedent_search: nextProps.search,
                     items: [],
                     items_orig: [],
                     load: true
@@ -161,7 +162,7 @@ class ItemList extends Component {
                     <div className="Item-List">
                         <div style={{"width":"100%", "textAlign": "left"}}>
                             <span>[+] Showing bests {this.state.count} results for&nbsp; 
-                                     {this.props.search.length === 0 ? "reactJs": this.props.search}
+                                     {this.props.search.length === 0 ? "'reactJs'": "'"+this.props.search+"'"}
                                      &nbsp;{this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
                             </span>
                         </div>
