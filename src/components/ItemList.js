@@ -138,10 +138,22 @@ class ItemList extends Component {
         this.fetch_projects("reactjs");
     }
 
+    filterItemsByLanguage(items, { language: selectedLanguage }) {
+        if (selectedLanguage === "all") {
+            return items;
+        }
+
+        return items.filter(elt => {
+                        const language = elt && elt["language"];
+                        return language?.toLowerCase() === selectedLanguage?.toLowerCase();
+        });
+    }
+
     render() {
         const loader = (<img src="/loading.gif" alt=""/>);
+        const items = this.filterItemsByLanguage(this.state.items, this.props);
         let item_list = (<div style={{"display": "flex", "flexWrap": "wrap"}}>
-                            {this.state.items.length > 0 ? this.state.items.map((elt, index) => {
+                            {items.length > 0 ? items.map((elt, index) => {
                                                                 return (<Item key={index}
                                                                                 source={elt.source}
                                                                                 url={elt.url}
