@@ -6,11 +6,12 @@ A simple ReacJs-SearchEngine for Open-sources projects on Github, GitLab and Bit
 
 [DEMO-VIDEO](https://www.loom.com/share/67387a02579b4e5e944adb985441772c)
 
-[SEARCH-ENGINE-LINK](https://zolo.ngrok.io/)
+[SEARCH-ENGINE-LINK](https://thezolo.herokuapp.com/)
 
 ## Requirements
 
-- Yarn or Npm
+- Yarn/Npm
+- create-react-app
 
 ## How to install
 
