@@ -18,91 +18,85 @@ class ItemList extends Component {
         }
     }
 
-    fetch_projects = (search) => {
-        search = search.toLowerCase();
+    pushNewItems(items, source, resData, source_object) {
+        resData.map((elt, index) => {
+            const author = source_object["author"].split("|");
+            const author_avatar = source_object["author_avatar"].split("|");
 
+            if (source === "github"){
+                items.push({
+                    "index": index,
+                    "source": source,
+                    "title": elt[source_object["name"]],
+                    "url": elt[source_object["html_url"]],
+                    "author": elt[author[0]][author[1]],
+                    "author_avatar": elt[author_avatar[0]][author_avatar[1]],
+                    "stars": parseInt(elt[source_object["stars"]]),
+                    "forks": elt[source_object["forks"]],
+                    "issues": elt[source_object["issues"]],
+                    "language": elt[source_object["language"]],
+                    "description": elt[source_object["description"]]
+                });
+            }else if (source === "gitlab"){
+                let avatar=""; 
+                if (typeof(elt[author_avatar[0]][author_avatar[1]]) != "undefined" && 
+                                elt[author_avatar[0]][author_avatar[1]] != null){
+                                    avatar = (elt[author_avatar[0]][author_avatar[1]].indexOf("http") === -1) ?
+                                                "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] : 
+                                                    elt[author_avatar[0]][author_avatar[1]];
+                }
+                items.push({
+                    "index": index,
+                    "source": source,
+                    "title": elt[source_object["name"]],
+                    "url": elt[source_object["html_url"]],
+                    "author": elt[author[0]][author[1]],
+                    "author_avatar": avatar,
+                    "stars": parseInt(elt[source_object["stars"]]),
+                    "forks": elt[source_object["forks"]],
+                    "issues": "-",
+                    "language": "-",
+                    "description": elt[source_object["description"]]
+                });
+            }
 
-        let source = "github";
-        fetch(this.state.links[source]["link"] + search + "&page=1&per_page=250")
-        .then(async response => {
-            let resData = await response.json();
-            let items = [];
-            let source_object = this.state.links[source];
+             return true;
+        });
+        // perform a sort
+        items.sort((a, b) => a.stars - b.stars).reverse();
+        this.setState({
+            load: false,
+            items: items,
+            items_orig: items,
+            count: items.length
+        });
+        return items;
+    }
 
-            resData["items"].map((elt, index) => {
-                const author = source_object["author"].split("|");
-                const author_avatar = source_object["author_avatar"].split("|");
- 
-                 items.push({
-                     "index": index,
-                     "source": source,
-                     "title": elt[source_object["name"]],
-                     "url": elt[source_object["html_url"]],
-                     "author": elt[author[0]][author[1]],
-                     "author_avatar": elt[author_avatar[0]][author_avatar[1]],
-                     "stars": parseInt(elt[source_object["stars"]]),
-                     "forks": elt[source_object["forks"]],
-                     "issues": elt[source_object["issues"]],
-                     "language": elt[source_object["language"]],
-                     "description": elt[source_object["description"]]
-                 });
-                 return true;
-            });
-            
-            items.sort((a, b) => a.stars - b.stars).reverse();;
-            this.setState({
-                load: false,
-                items: items,
-                items_orig: items,
-                count: items.length
-            });
-
-            source = "gitlab";
-            fetch(this.state.links[source]["link"] + search + "&page=1&per_page=100")
+    getresults(items, source, search, page){
+        return new Promise((resolve, reject) =>{
+            fetch(this.state.links[source]["link"] + search + "&page=" + page + "&per_page=250")
             .then(async response => {
-                resData = await response.json();
-                source_object = this.state.links[source];
+                const resData = await response.json();
+                const source_object = this.state.links[source];
                 
-                resData.map((elt, index) => {
-                    const author = source_object["author"].split("|");
-                    const author_avatar = source_object["author_avatar"].split("|");
-                    let avatar=""; 
-                    if (typeof(elt[author_avatar[0]][author_avatar[1]]) != "undefined" && elt[author_avatar[0]][author_avatar[1]] != null){
-                        avatar = (elt[author_avatar[0]][author_avatar[1]].indexOf("http") === -1) ? "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] : elt[author_avatar[0]][author_avatar[1]];
-                    }
-                    items.push({
-                         "index": index,
-                         "source": source,
-                         "title": elt[source_object["name"]],
-                         "url": elt[source_object["html_url"]],
-                         "author": elt[author[0]][author[1]],
-                         "author_avatar": avatar,
-                         "stars": parseInt(elt[source_object["stars"]]),
-                         "forks": elt[source_object["forks"]],
-                         "issues": "-",
-                         "language": "-",
-                         "description": elt[source_object["description"]]
-                     });
-                     return true;
-                });
-                // perform a sort
-                items.sort((a, b) => a.stars - b.stars).reverse();;
-                this.setState({
-                    load: false,
-                    items: items,
-                    items_orig: items,
-                    count: items.length
-                });
-
+                items = this.pushNewItems(items, source, (source === "github" ? resData["items"] : resData), source_object);
+                resolve(items);
             }).catch(error => {
                 this.setState({ errorMessage: error.toString() });
                 console.error('There was an error!', error);
             });
+        });
+    }
 
-        })
-        .catch(error => {
-            this.setState({ errorMessage: error.toString() });
-            console.error('There was an error!', error);
+    fetch_projects = (search) => {
+        search = search.toLowerCase();
+        let items = [];
+
+        this.getresults(items, "github", search, 1).then((returned_items) => {
+            this.getresults(returned_items, "gitlab", search, 1).then((res) => {
+                console.log("[+] Fetchs ended !")
+            });
         });
     }
 
@@ -144,30 +138,29 @@ class ItemList extends Component {
         }
 
         return items.filter(elt => {
-                        const language = elt && elt["language"];
-                        return language?.toLowerCase() === selectedLanguage?.toLowerCase();
+            const language = elt && elt["language"];
+            return language?.toLowerCase() === selectedLanguage?.toLowerCase();
         });
     }
 
-    render() {
-        const loader = (<img src="/loading.gif" alt=""/>);
+    getItemsComponents(){
         const items = this.filterItemsByLanguage(this.state.items, this.props);
-        let item_list = (<div style={{"display": "flex", "flexWrap": "wrap"}}>
+        return (<div style={{"display": "flex", "flexWrap": "wrap"}}>
                             {items.length > 0 ? items.map((elt, index) => {
                                                                 return (<Item key={index}
-                                                                                source={elt.source}
-                                                                                url={elt.url}
-                                                                                title={elt.title}
-                                                                                author={elt.author}
-                                                                                author_avatar={elt.author_avatar}
-                                                                                language={elt.language}
-                                                                                stars={elt.stars}
-                                                                                issues={elt.issues}
-                                                                                forks={elt.forks}
-                                                                                description={elt.description}/>)
-                                                            }) : (<center><h1>No results found !!!</h1></center>)
+                                                                                source={elt.source} url={elt.url}
+                                                                                title={elt.title} author={elt.author}
+                                                                                author_avatar={elt.author_avatar} language={elt.language}
+                                                                                stars={elt.stars} issues={elt.issues}
+                                                                                forks={elt.forks} description={elt.description}/>)
+                                                            }) : (<center>
+                                                                    <h1>No results found !!!</h1>
+                                                                </center>)
                             }
                         </div>);
+    }
+
+    render() {
         return (
             <div>
                 <center>
@@ -179,7 +172,7 @@ class ItemList extends Component {
                             </span>
                         </div>
                         <br/>
-                        {this.state.load ? loader : item_list }
+                        {this.state.load ? (<img src="/loading.gif" alt=""/>) : this.getItemsComponents() }
                     </div>
                 </center>
             </div>
