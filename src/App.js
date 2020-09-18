@@ -82,7 +82,7 @@ class App extends Component {
             </p>
 
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-12">
                     <input type="text"
                         className="search-zone"
                         onKeyDown = {(event) => this.handle_change(event)}
