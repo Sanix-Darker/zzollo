@@ -46,6 +46,7 @@ small{
   font-size: 20px;
   box-shadow : 0 3px 5px rgba(0,0,0,0.35);
   border: 0px;
+	margin-bottom: 20px;
 }
 
 .language-zone, .order-zone, .sort-zone{
