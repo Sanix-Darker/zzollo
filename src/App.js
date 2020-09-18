@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ItemList from './components/ItemList';
-import LanguagesOption from './components/LanguagesOption';
+import LanguagesOption from './components/utils/js/LanguagesOption';
 
 class App extends Component {
 

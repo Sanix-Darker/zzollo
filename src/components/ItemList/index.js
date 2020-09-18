@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './ItemList.css';
-import Item from './Item';
-import { link_selector } from './Selectors'
+import Item from '../Item';
+import { link_selector } from '../utils/js/Selectors'
 // import axios from 'axios';
 
 class ItemList extends Component {
