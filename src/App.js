@@ -17,17 +17,24 @@ class App extends Component {
     }
   }
 
+  /**
+   * 
+   * @param {*} event 
+   */
   handle_change(event){
-
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter')
       this.setState({go_search: true});
-    }else{
+    else
       this.setState({go_search: false});
-    }
 
     this.setState({search: event.target.value});
   }
 
+  /**
+   * 
+   * @param {*} event 
+   * @param {*} type 
+   */
   handle_change_option(event, type){
     if (type === "lang"){
       this.setState({
@@ -47,6 +54,9 @@ class App extends Component {
     }
   }
 
+  /**
+   * 
+   */
   go_search_change(){
     this.setState({
       go_search: !this.state.go_search
@@ -91,7 +101,7 @@ class App extends Component {
                     <select className="sort-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "sort")}>
-                      <option value="all">Sort by (Stars / Issues / fork)</option>
+                      <option value="all">By (Stars / Issues / fork)</option>
                       <option value="star">Sort by Stars</option>
                       <option value="issue">Sort by Issues</option>
                       <option value="fork">Sort by Forks</option>
@@ -101,7 +111,7 @@ class App extends Component {
                     <select className="order-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "order")}>
-                      <option value="all">Select the Order</option>
+                      <option value="all">Filter by (Acsending/Descending))</option>
                       <option value="asc">Ascending order</option>
                       <option value="desc">Descending order</option>
                     </select>

@@ -18,6 +18,13 @@ class ItemList extends Component {
         }
     }
 
+    /**
+     * 
+     * @param {*} items 
+     * @param {*} source 
+     * @param {*} resData 
+     * @param {*} source_object 
+     */
     pushNewItems(items, source, resData, source_object) {
         resData.map((elt, index) => {
             const author = source_object["author"].split("|");
@@ -32,8 +39,8 @@ class ItemList extends Component {
                     "author": elt[author[0]][author[1]],
                     "author_avatar": elt[author_avatar[0]][author_avatar[1]],
                     "stars": parseInt(elt[source_object["stars"]]),
-                    "forks": elt[source_object["forks"]],
-                    "issues": elt[source_object["issues"]],
+                    "forks": parseInt(elt[source_object["forks"]]),
+                    "issues": parseInt(elt[source_object["issues"]]),
                     "language": elt[source_object["language"]],
                     "description": elt[source_object["description"]]
                 });
@@ -53,8 +60,8 @@ class ItemList extends Component {
                     "author": elt[author[0]][author[1]],
                     "author_avatar": avatar,
                     "stars": parseInt(elt[source_object["stars"]]),
-                    "forks": elt[source_object["forks"]],
-                    "issues": "-",
+                    "forks": parseInt(elt[source_object["forks"]]),
+                    "issues": 0,
                     "language": "-",
                     "description": elt[source_object["description"]]
                 });
@@ -73,6 +80,13 @@ class ItemList extends Component {
         return items;
     }
 
+    /**
+     * 
+     * @param {*} items 
+     * @param {*} source 
+     * @param {*} search 
+     * @param {*} page 
+     */
     getresults(items, source, search, page){
         return new Promise((resolve, reject) =>{
             fetch(this.state.links[source]["link"] + search + "&page=" + page + "&per_page=250")
@@ -89,6 +103,10 @@ class ItemList extends Component {
         });
     }
 
+    /**
+     * 
+     * @param {*} search 
+     */
     fetch_projects = (search) => {
         search = search.toLowerCase();
         let items = [];
@@ -99,6 +117,7 @@ class ItemList extends Component {
             });
         });
     }
+
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.go_search === true){
@@ -119,6 +138,41 @@ class ItemList extends Component {
                         return (elt["language"] !== null) ? (elt["language"].toLowerCase() === nextProps.language.toLowerCase()) : null
                     }),
                 });
+            }
+            if (nextProps.sort !== "all"){
+                if (nextProps.sort === "star"){
+                    if (nextProps.order === "desc"){
+                        this.setState({
+                            items: this.state.items_orig.sort((a, b) => a.stars - b.stars).reverse(),
+                        });
+                    }else{
+                        this.setState({
+                            items: this.state.items_orig.sort((a, b) => a.stars - b.stars),
+                        });
+                    }
+                }
+                else if (nextProps.sort === "fork"){
+                    if (nextProps.order === "desc"){
+                        this.setState({
+                            items: this.state.items_orig.sort((a, b) => a.forks - b.forks).reverse(),
+                        });
+                    }else{
+                        this.setState({
+                            items: this.state.items_orig.sort((a, b) => a.forks - b.forks),
+                        });
+                    }
+                }
+                else if (nextProps.sort === "issue"){
+                    if (nextProps.order === "desc"){
+                        this.setState({
+                            items: this.state.items_orig.sort((a, b) => a.issues - b.issues).reverse(),
+                        });
+                    }else{
+                        this.setState({
+                            items: this.state.items_orig.sort((a, b) => a.issues - b.issues),
+                        });
+                    }
+                }
             }else{
                 this.setState({
                     items: this.state.items_orig
@@ -132,6 +186,11 @@ class ItemList extends Component {
         this.fetch_projects("reactjs");
     }
 
+    /**
+     * 
+     * @param {*} items 
+     * @param {*} param1 
+     */
     filterItemsByLanguage(items, { language: selectedLanguage }) {
         if (selectedLanguage === "all") {
             return items;
@@ -143,6 +202,9 @@ class ItemList extends Component {
         });
     }
 
+    /**
+     * 
+     */
     getItemsComponents(){
         const items = this.filterItemsByLanguage(this.state.items, this.props);
         return (<div style={{"display": "flex", "flexWrap": "wrap"}}>
