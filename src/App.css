@@ -72,7 +72,11 @@ small{
   }
   .search-zone{
     width: 96%;
-  }
+	}
+	.zone{
+		width: 96%;
+		margin-bottom: 4px;
+	}
 }
 
 /* On screens that are 600px or less, set the background color to olive */
@@ -90,7 +94,11 @@ small{
   }
   .search-zone,.language-zone, .order-zone, .sort-zone{
     width: 96%;
-  }
+	}
+	.zone{
+		width: 100%;
+		margin-bottom: 5px;
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {
