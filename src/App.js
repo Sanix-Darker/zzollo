@@ -91,7 +91,7 @@ class App extends Component {
                 </div>
 							</div>
 							<div className="row">
-                <div className="col-md-4">
+                <div className="col-md-4 zone">
                     <select className="language-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "lang")}>
@@ -99,7 +99,7 @@ class App extends Component {
                       {LanguagesOption}
                     </select>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4 zone">
                     <select className="sort-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "sort")}>
@@ -109,7 +109,7 @@ class App extends Component {
                       <option value="fork">Sort by Forks</option>
                     </select>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4 zone">
                     <select className="order-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "order")}>
