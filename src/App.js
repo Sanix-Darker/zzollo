@@ -67,10 +67,29 @@ class App extends Component {
                         />
                   </td>
                   <td>
+                    <select className="sort-zone"
+                            defaultValue="all"
+                            onChange = {(event) => this.handle_change_option(event)}>
+                      <option value="all">Sort by (Stars / Issues / fork)</option>
+                      <option value="star">Sort by Stars</option>
+                      <option value="issue">Sort by Issues</option>
+                      <option value="fork">Sort by Forks</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select className="sort-zone"
+                            defaultValue="all"
+                            onChange = {(event) => this.handle_change_option(event)}>
+                      <option value="all">Select the Order</option>
+                      <option value="asc">Ascending order</option>
+                      <option value="desc">Descending order</option>
+                    </select>
+                  </td>
+                  <td>
                     <select className="language-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event)}>
-                      <option value="all">All languages</option>
+                      <option value="all">Filter by languages</option>
                       {LanguagesOption}
                     </select>
                   </td>
