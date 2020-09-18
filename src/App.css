@@ -41,18 +41,15 @@ small{
 
 .search-zone{
   z-index: 9999;
-  width: 98.3%;
+  width: 100%;
   padding : 15px;
   font-size: 20px;
   box-shadow : 0 3px 5px rgba(0,0,0,0.35);
   border: 0px;
-  margin-left: -0.2em;
 }
 
-.language-zone{
-  float: right;
-  margin-right: 0.2em;
-  width: 94%;
+.language-zone, .order-zone, .sort-zone{
+  width: 100%;
   padding: 15px;
   border: 0px;
   background: white;
@@ -63,7 +60,7 @@ small{
 .search-box{
   z-index: 9999;
   background-color: #282c34;
-  width: 81.5%;
+  width: 79.3%;
   position: fixed;
   top: 0px;
 }
@@ -86,12 +83,13 @@ small{
   .App-header {
     padding-left: 1%;
     padding-right: 1%;
+    padding-top: 35%;
   }
   .search-box{
     width: 100%;
   }
-  .search-zone{
-    width: 89%;
+  .search-zone,.language-zone, .order-zone, .sort-zone{
+    width: 96%;
   }
 }
 
