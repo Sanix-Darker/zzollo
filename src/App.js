@@ -89,7 +89,9 @@ class App extends Component {
                         placeholder="Search keyword(s) for open-source project(s)..."
                         />
                 </div>
-                <div className="col-md-2">
+							</div>
+							<div className="row">
+                <div className="col-md-4">
                     <select className="language-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "lang")}>
@@ -97,7 +99,7 @@ class App extends Component {
                       {LanguagesOption}
                     </select>
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-4">
                     <select className="sort-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "sort")}>
@@ -107,7 +109,7 @@ class App extends Component {
                       <option value="fork">Sort by Forks</option>
                     </select>
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-4">
                     <select className="order-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "order")}>
