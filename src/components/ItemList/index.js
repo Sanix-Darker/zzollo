@@ -207,7 +207,7 @@ class ItemList extends Component {
      */
     getItemsComponents(){
         const items = this.filterItemsByLanguage(this.state.items, this.props);
-        return (<div style={{"display": "flex", "flexWrap": "wrap"}}>
+        return (<div style={{"display": "flex", "flexWrap": "wrap","justifyContent":"space-around"}}>
                             {items.length > 0 ? 
                                 items.map(
                                     (elt, index) => {
@@ -230,7 +230,7 @@ class ItemList extends Component {
             <div>
                 <center>
                     <div className="Item-List">
-                        <div style={{"width":"100%", "textAlign": "left"}}>
+                        <div style={{"width":"100%", "textAlign": "center"}}>
                             <span>[+] Showing bests {this.state.count} results for&nbsp; 
                                      {this.props.search.length === 0 ? "'reactJs'": "'"+this.props.search+"'"}
                                      &nbsp;{this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
