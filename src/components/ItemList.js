@@ -146,16 +146,19 @@ class ItemList extends Component {
     getItemsComponents(){
         const items = this.filterItemsByLanguage(this.state.items, this.props);
         return (<div style={{"display": "flex", "flexWrap": "wrap"}}>
-                            {items.length > 0 ? items.map((elt, index) => {
-                                                                return (<Item key={index}
-                                                                                source={elt.source} url={elt.url}
-                                                                                title={elt.title} author={elt.author}
-                                                                                author_avatar={elt.author_avatar} language={elt.language}
-                                                                                stars={elt.stars} issues={elt.issues}
-                                                                                forks={elt.forks} description={elt.description}/>)
-                                                            }) : (<center>
-                                                                    <h1>No results found !!!</h1>
-                                                                </center>)
+                            {items.length > 0 ? 
+                                items.map(
+                                    (elt, index) => {
+                                        return (<Item key={index}
+                                                        source={elt.source} url={elt.url}
+                                                        title={elt.title} author={elt.author}
+                                                        author_avatar={elt.author_avatar} language={elt.language}
+                                                        stars={elt.stars} issues={elt.issues}
+                                                        forks={elt.forks} description={elt.description}/>)
+                                    }) : 
+                                (<center>
+                                    <h1>No results found !!!</h1>
+                                </center>)
                             }
                         </div>);
     }
