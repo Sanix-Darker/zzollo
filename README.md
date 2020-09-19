@@ -39,6 +39,6 @@ npm start
 
 - Sanix-darker
 
-## LICENSE
+## Contributors
 
-- MIT-LICENSE
+- DTan13
