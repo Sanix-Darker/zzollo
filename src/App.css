@@ -46,6 +46,7 @@ small{
   font-size: 20px;
   box-shadow : 0 3px 5px rgba(0,0,0,0.35);
   border: 0px;
+	margin-bottom: 20px;
 }
 
 .language-zone, .order-zone, .sort-zone{
@@ -60,7 +61,7 @@ small{
 .search-box{
   z-index: 9999;
   background-color: #282c34;
-  width: 79.3%;
+  width: 82%;
   position: fixed;
   top: 0px;
 }
@@ -72,7 +73,11 @@ small{
   }
   .search-zone{
     width: 96%;
-  }
+	}
+	.zone{
+		width: 96%;
+		margin-bottom: 4px;
+	}
 }
 
 /* On screens that are 600px or less, set the background color to olive */
@@ -90,7 +95,11 @@ small{
   }
   .search-zone,.language-zone, .order-zone, .sort-zone{
     width: 96%;
-  }
+	}
+	.zone{
+		width: 100%;
+		margin-bottom: 5px;
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {
