@@ -11,7 +11,8 @@
 
     z-index: 9;
     transform: scale(1);
-    transition: 0.7s;
+		transition: 0.7s;
+		cursor: pointer;
 }
 
 .Item-Single:hover{
