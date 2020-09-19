@@ -34,3 +34,7 @@ npm start
 ## Author
 
 - Sanix-darker
+
+## Contributors
+
+- DTan13
