@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
+import './components/utils/css/grid.css';
 import ItemList from './components/ItemList';
-import LanguagesOption from './components/LanguagesOption';
+import LanguagesOption from './components/utils/js/LanguagesOption';
 
 class App extends Component {
 
@@ -10,28 +11,52 @@ class App extends Component {
     this.state = {
       search: "",
       language: "all",
+      sort: "all",
+      order: "all",
       go_search: false
     }
   }
 
+  /**
+   * 
+   * @param {*} event 
+   */
   handle_change(event){
-
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter')
       this.setState({go_search: true});
-    }else{
+    else
       this.setState({go_search: false});
-    }
 
     this.setState({search: event.target.value});
   }
 
-  handle_change_option(event){
-    this.setState({
+  /**
+   * 
+   * @param {*} event 
+   * @param {*} type 
+   */
+  handle_change_option(event, type){
+    if (type === "lang"){
+      this.setState({
         language: event.target.selectedOptions[0].value,
         go_search: true
-    });
+      });
+    }else if (type === "sort"){
+      this.setState({
+        sort: event.target.selectedOptions[0].value,
+        go_search: true
+      });
+    }else if (type === "order"){
+      this.setState({
+        order: event.target.selectedOptions[0].value,
+        go_search: true
+      });
+    }
   }
 
+  /**
+   * 
+   */
   go_search_change(){
     this.setState({
       go_search: !this.state.go_search
@@ -52,34 +77,55 @@ class App extends Component {
                   <img alt="" src="https://avatars1.githubusercontent.com/u/22576758?s=60&v=4" style={{"borderRadius": "100%", "width": "2em"}}/>
                 </a>
                 <a href="/" style={{"color": "white", "textDecoration": "none"}}><code>Z0l0</code></a>
-              <small> Search open-source projects on github, gitlab and bitbucket.
-              <a href="https://github.com/sanix-darker/zolo" style={{"color": "white", "float":"right", "textDecoration": "none"}}>[Github-project-link]</a></small>
+              <small> Search open-source projects on github / gitlab / bitbucket.
+              <a href="https://github.com/sanix-darker/zolo" style={{"color": "white", "float":"right", "textDecoration": "none"}}>[Project-link]</a></small>
             </p>
 
-            <table style={{"width": "100%"}}>
-              <tbody>
-                <tr>
-                  <td style={{"width": "70%"}}>
+            <div className="row">
+              <div className="col-md-12">
                     <input type="text"
                         className="search-zone"
                         onKeyDown = {(event) => this.handle_change(event)}
                         placeholder="Search keyword(s) for open-source project(s)..."
                         />
-                  </td>
-                  <td>
+                </div>
+							</div>
+							<div className="row">
+                <div className="col-md-4 zone">
                     <select className="language-zone"
                             defaultValue="all"
-                            onChange = {(event) => this.handle_change_option(event)}>
-                      <option value="all">All languages</option>
+                            onChange = {(event) => this.handle_change_option(event, "lang")}>
+                      <option value="all">By languages</option>
                       {LanguagesOption}
                     </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                </div>
+                <div className="col-md-4 zone">
+                    <select className="sort-zone"
+                            defaultValue="all"
+                            onChange = {(event) => this.handle_change_option(event, "sort")}>
+                      <option value="all">By (Stars / Issues / fork)</option>
+                      <option value="star">Sort by Stars</option>
+                      <option value="issue">Sort by Issues</option>
+                      <option value="fork">Sort by Forks</option>
+                    </select>
+                </div>
+                <div className="col-md-4 zone">
+                    <select className="order-zone"
+                            defaultValue="all"
+                            onChange = {(event) => this.handle_change_option(event, "order")}>
+                      <option value="all">Filter by (Acsending/Descending))</option>
+                      <option value="asc">Ascending order</option>
+                      <option value="desc">Descending order</option>
+                    </select>
+                </div>
+              </div>
           </div>
           <br/>
-          <ItemList search={this.state.search} language={this.state.language} go_search={this.state.go_search}/>
+          <ItemList search={this.state.search} 
+                    language={this.state.language} 
+                    sort={this.state.sort} 
+                    order={this.state.order} 
+                    go_search={this.state.go_search}/>
         </header>
       </div>
     );
