@@ -47,10 +47,10 @@ class ItemList extends Component {
             }else if (source === "gitlab"){
                 let avatar=""; 
                 if (typeof(elt[author_avatar[0]][author_avatar[1]]) != "undefined" && 
-                                elt[author_avatar[0]][author_avatar[1]] != null){
-                                    avatar = (elt[author_avatar[0]][author_avatar[1]].indexOf("http") === -1) ?
-                                                "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] : 
-                                                    elt[author_avatar[0]][author_avatar[1]];
+                    elt[author_avatar[0]][author_avatar[1]] != null){
+                        avatar = (elt[author_avatar[0]][author_avatar[1]].indexOf("http") === -1) ?
+                                    "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] : 
+                                    elt[author_avatar[0]][author_avatar[1]];
                 }
                 items.push({
                     "index": index,
@@ -67,7 +67,7 @@ class ItemList extends Component {
                 });
             }
 
-             return true;
+            return true;
         });
         // perform a sort
         items.sort((a, b) => a.stars - b.stars).reverse();
@@ -139,6 +139,15 @@ class ItemList extends Component {
                     }),
                 });
             }
+
+            if (nextProps.source !== "all"){
+                this.setState({
+                    items: this.state.items_orig.filter(elt => {
+                        return (elt["source"] !== null) ? (elt["source"].toLowerCase() === nextProps.source.toLowerCase()) : null
+                    }),
+                });
+            }
+
             if (nextProps.sort !== "all"){
                 if (nextProps.sort === "star"){
                     if (nextProps.order === "desc"){

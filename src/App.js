@@ -10,6 +10,7 @@ class App extends Component {
     super()
     this.state = {
       search: "",
+      source: "all",
       language: "all",
       sort: "all",
       order: "all",
@@ -36,21 +37,34 @@ class App extends Component {
    * @param {*} type 
    */
   handle_change_option(event, type){
-    if (type === "lang"){
-      this.setState({
-        language: event.target.selectedOptions[0].value,
-        go_search: true
-      });
-    }else if (type === "sort"){
-      this.setState({
-        sort: event.target.selectedOptions[0].value,
-        go_search: true
-      });
-    }else if (type === "order"){
-      this.setState({
-        order: event.target.selectedOptions[0].value,
-        go_search: true
-      });
+
+    switch(type) {
+      case "source":
+        this.setState({
+          source: event.target.selectedOptions[0].value,
+          go_search: true
+        });
+        break;
+      case "lang":
+        this.setState({
+          language: event.target.selectedOptions[0].value,
+          go_search: true
+        });
+        break;
+      case "sort":
+        this.setState({
+          sort: event.target.selectedOptions[0].value,
+          go_search: true
+        });
+        break;
+      case "order":
+        this.setState({
+          order: event.target.selectedOptions[0].value,
+          go_search: true
+        })
+        break;
+      default:
+        console.log("Nothing to do....")
     }
   }
 
@@ -91,7 +105,17 @@ class App extends Component {
                 </div>
 							</div>
 							<div className="row">
-                <div className="col-md-4 zone">
+              <div className="col-md-3 zone">
+                    <select className="language-zone"
+                            defaultValue="all"
+                            onChange = {(event) => this.handle_change_option(event, "source")}>
+                      <option value="all">From [Github / GitLab / Bitbucket]</option>
+                      <option value="github">GitHub</option>
+                      <option value="gitlab">GitLab</option>
+                      <option value="bitbucket">BitBucket</option>
+                    </select>
+                </div>
+                <div className="col-md-3 zone">
                     <select className="language-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "lang")}>
@@ -99,7 +123,7 @@ class App extends Component {
                       {LanguagesOption}
                     </select>
                 </div>
-                <div className="col-md-4 zone">
+                <div className="col-md-3 zone">
                     <select className="sort-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "sort")}>
@@ -109,7 +133,7 @@ class App extends Component {
                       <option value="fork">Sort by Forks</option>
                     </select>
                 </div>
-                <div className="col-md-4 zone">
+                <div className="col-md-3 zone">
                     <select className="order-zone"
                             defaultValue="all"
                             onChange = {(event) => this.handle_change_option(event, "order")}>
@@ -122,6 +146,7 @@ class App extends Component {
           </div>
           <br/>
           <ItemList search={this.state.search} 
+                    source={this.state.source} 
                     language={this.state.language} 
                     sort={this.state.sort} 
                     order={this.state.order} 
