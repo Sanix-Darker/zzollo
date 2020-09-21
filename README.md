@@ -6,7 +6,7 @@ A simple ReacJs-SearchEngine for Open-sources projects on Github, GitLab and Bit
 
 [DEMO-VIDEO](https://www.loom.com/share/6ffd428b077f4ffeb7c35f2f1d56d74b)
 
-[SEARCH-ENGINE-LINK](https://bit.ly/thezolo/)
+[SEARCH-ENGINE-LINK](https://bit.ly/thezolo)
 
 ## Requirements
 
