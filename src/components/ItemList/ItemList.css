@@ -1,6 +1,6 @@
 .Item-List{
 		padding-top: 13em;
-		width: 95%;
+		width: 100%;
 }
 @media screen and (max-width: 992px) {
   .Item-List{
