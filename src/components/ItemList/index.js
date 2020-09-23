@@ -91,7 +91,7 @@ class ItemList extends Component {
         return new Promise((resolve, reject) =>{
             const linkToFetch = this.state.links[source]["link"] + search;
 
-            fetch((source === "github" || source === "gitlab") ? linkToFetch + "&page=" + page + "&per_page=250" : linkToFetch)
+            fetch((source === "github" || source === "gitlab") ? linkToFetch + "&page=" + page + "&per_page=200" : linkToFetch)
             .then(async response => {
                 const resData = await response.json();
                 const source_object = this.state.links[source];
@@ -145,6 +145,10 @@ class ItemList extends Component {
                     items: this.state.itemsOrig.filter(elt => {
                         return (elt["source"] !== null) ? (elt["source"].toLowerCase() === nextProps.source.toLowerCase()) : null
                     }),
+                });
+            }else{
+                this.setState({
+                    items: this.state.itemsOrig,
                 });
             }
 
