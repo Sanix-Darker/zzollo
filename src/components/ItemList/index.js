@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './ItemList.css';
 import Item from '../Item';
-import { link_selector } from '../utils/js/Selectors'
+import { linkSelector } from '../utils/js/Selectors'
 // import axios from 'axios';
 
 class ItemList extends Component {
@@ -9,10 +9,10 @@ class ItemList extends Component {
     constructor() {
         super()
         this.state = {
-            precedent_search: "",
-            links: link_selector,
+            precedentSearch: "",
+            links: linkSelector,
             items: [],
-            items_orig: [],
+            itemsOrig: [],
             load: true,
             count: 0
         }
@@ -30,7 +30,7 @@ class ItemList extends Component {
             const author = source_object["author"].split("|");
             const author_avatar = source_object["author_avatar"].split("|");
 
-            if (source === "github"){
+            if (source === "github" || source === "bitbucket"){
                 items.push({
                     "index": index,
                     "source": source,
@@ -74,7 +74,7 @@ class ItemList extends Component {
         this.setState({
             load: false,
             items: items,
-            items_orig: items,
+            itemsOrig: items,
             count: items.length
         });
         return items;
@@ -89,12 +89,18 @@ class ItemList extends Component {
      */
     getresults(items, source, search, page){
         return new Promise((resolve, reject) =>{
-            fetch(this.state.links[source]["link"] + search + "&page=" + page + "&per_page=250")
+            const linkToFetch = this.state.links[source]["link"] + search;
+
+            fetch((source === "github" || source === "gitlab") ? linkToFetch + "&page=" + page + "&per_page=250" : linkToFetch)
             .then(async response => {
                 const resData = await response.json();
                 const source_object = this.state.links[source];
                 
-                items = this.pushNewItems(items, source, (source === "github" ? resData["items"] : resData), source_object);
+                items = this.pushNewItems(items, 
+                    source, 
+                    (source === "github" ? resData["items"] : source === "bitbucket" ? resData["values"] : resData), 
+                    source_object
+                );
                 resolve(items);
             }).catch(error => {
                 this.setState({ errorMessage: error.toString() });
@@ -112,8 +118,10 @@ class ItemList extends Component {
         let items = [];
 
         this.getresults(items, "github", search, 1).then((returned_items) => {
-            this.getresults(returned_items, "gitlab", search, 1).then((res) => {
-                console.log("[+] Fetchs ended !")
+            this.getresults(returned_items, "gitlab", search, 1).then((returned_items2) => {
+                this.getresults(returned_items2, "bitbucket", search, 1).then((res) => {
+                    console.log("[+] Fetchs ended !");
+                })
             });
         });
     }
@@ -122,11 +130,11 @@ class ItemList extends Component {
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.go_search === true){
 
-            if (nextProps.search !== this.state.precedent_search){
+            if (nextProps.search !== this.state.precedentSearch){
                 this.setState({
-                    precedent_search: nextProps.search,
+                    precedentSearch: nextProps.search,
                     items: [],
-                    items_orig: [],
+                    itemsOrig: [],
                     load: true
                 });
                 this.fetch_projects(nextProps.search);
@@ -134,7 +142,7 @@ class ItemList extends Component {
 
             if (nextProps.source !== "all"){
                 this.setState({
-                    items: this.state.items_orig.filter(elt => {
+                    items: this.state.itemsOrig.filter(elt => {
                         return (elt["source"] !== null) ? (elt["source"].toLowerCase() === nextProps.source.toLowerCase()) : null
                     }),
                 });
@@ -142,7 +150,7 @@ class ItemList extends Component {
 
             if (nextProps.language !== "all"){
                 this.setState({
-                    items: this.state.items_orig.filter(elt => {
+                    items: this.state.itemsOrig.filter(elt => {
                         return (elt["language"] !== null) ? (elt["language"].toLowerCase() === nextProps.language.toLowerCase()) : null
                     }),
                 });
@@ -152,33 +160,33 @@ class ItemList extends Component {
                 if (nextProps.sort === "star"){
                     if (nextProps.order === "desc"){
                         this.setState({
-                            items: this.state.items_orig.sort((a, b) => a.stars - b.stars).reverse(),
+                            items: this.state.itemsOrig.sort((a, b) => a.stars - b.stars).reverse(),
                         });
                     }else{
                         this.setState({
-                            items: this.state.items_orig.sort((a, b) => a.stars - b.stars),
+                            items: this.state.itemsOrig.sort((a, b) => a.stars - b.stars),
                         });
                     }
                 }
                 else if (nextProps.sort === "fork"){
                     if (nextProps.order === "desc"){
                         this.setState({
-                            items: this.state.items_orig.sort((a, b) => a.forks - b.forks).reverse(),
+                            items: this.state.itemsOrig.sort((a, b) => a.forks - b.forks).reverse(),
                         });
                     }else{
                         this.setState({
-                            items: this.state.items_orig.sort((a, b) => a.forks - b.forks),
+                            items: this.state.itemsOrig.sort((a, b) => a.forks - b.forks),
                         });
                     }
                 }
                 else if (nextProps.sort === "issue"){
                     if (nextProps.order === "desc"){
                         this.setState({
-                            items: this.state.items_orig.sort((a, b) => a.issues - b.issues).reverse(),
+                            items: this.state.itemsOrig.sort((a, b) => a.issues - b.issues).reverse(),
                         });
                     }else{
                         this.setState({
-                            items: this.state.items_orig.sort((a, b) => a.issues - b.issues),
+                            items: this.state.itemsOrig.sort((a, b) => a.issues - b.issues),
                         });
                     }
                 }

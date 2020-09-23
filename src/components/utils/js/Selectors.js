@@ -1,4 +1,4 @@
-export const link_selector = {
+export const linkSelector = {
     "github": {
         "link": "https://api.github.com/search/repositories?sort=stars&q=",
         "count": "total_count",
@@ -30,7 +30,7 @@ export const link_selector = {
         "description": "description"
     },
     "bitbucket": {
-        "link": "https://api.bitbucket.org/2.0/repositories",
+        "link": "https://api.bitbucket.org/2.0/repositories/",
         "count": "",
         "items": "",
         "author": "owner|display_name",
