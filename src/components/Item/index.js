@@ -1,6 +1,10 @@
 import React from 'react'
 import './Item.css';
 
+const printZeroIfNan = (value) => {
+  return value.toString() === "NaN" ? "0" : value.toString()
+}
+
 const Item = (props) => {
   return (
     <div className="Item-Single">
@@ -47,7 +51,13 @@ const Item = (props) => {
       </p>
 
       <div className="details">
-        <i><b style={{"fontSize":"15px"}}>{props.language}</b>, <b>{props.stars}</b> stars, <b>{props.forks}</b> forks || <b>{props.issues}</b>issues</i>
+        <i>
+          <b style={{"fontSize":"15px"}}>
+            {props.language}
+          </b>, 
+          <b>{printZeroIfNan(props.stars)}</b> stars, 
+          <b>{printZeroIfNan(props.forks)}</b> forks || 
+          <b>{printZeroIfNan(props.issues)}</b>issues</i>
       </div>
     </div>
   );
