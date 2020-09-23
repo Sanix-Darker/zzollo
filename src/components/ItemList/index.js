@@ -132,18 +132,18 @@ class ItemList extends Component {
                 this.fetch_projects(nextProps.search);
             }
 
-            if (nextProps.language !== "all"){
-                this.setState({
-                    items: this.state.items_orig.filter(elt => {
-                        return (elt["language"] !== null) ? (elt["language"].toLowerCase() === nextProps.language.toLowerCase()) : null
-                    }),
-                });
-            }
-
             if (nextProps.source !== "all"){
                 this.setState({
                     items: this.state.items_orig.filter(elt => {
                         return (elt["source"] !== null) ? (elt["source"].toLowerCase() === nextProps.source.toLowerCase()) : null
+                    }),
+                });
+            }
+
+            if (nextProps.language !== "all"){
+                this.setState({
+                    items: this.state.items_orig.filter(elt => {
+                        return (elt["language"] !== null) ? (elt["language"].toLowerCase() === nextProps.language.toLowerCase()) : null
                     }),
                 });
             }
@@ -182,10 +182,6 @@ class ItemList extends Component {
                         });
                     }
                 }
-            }else{
-                this.setState({
-                    items: this.state.items_orig
-                });
             }
         }
     }
