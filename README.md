@@ -13,6 +13,7 @@ A simple ReacJs-SearchEngine for Open-sources projects on Github, GitLab and Bit
 - Yarn/Npm
 - create-react-app
 
+
 ## How to install
 
 You just have to run :
@@ -22,6 +23,8 @@ yarn install
 # or
 npm install
 ```
+
+
 ## How to launch
 
 You just have to run :
@@ -35,6 +38,7 @@ npm start
 # http://localhost:3007 
 ```
 
+
 ## How to contribute
 
 Just follow these steps :
@@ -45,10 +49,7 @@ Just follow these steps :
 - Create a Pull Request to develop branch.
 - After a check, it will be verify and merge to the project.
 
+
 ## Author
 
 - Sanix-darker
-
-## Contributors
-
-- DTan13
