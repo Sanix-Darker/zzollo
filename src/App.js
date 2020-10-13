@@ -77,8 +77,20 @@ class App extends Component {
     });
   }
 
-  componentDidMount(){
+  // get query parameter
+  getQueryStringValue (key) {  
+    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[.+*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
+  }  
 
+  componentDidMount(){
+    const searchText = this.getQueryStringValue("q");
+
+    if (searchText !== ''){
+      this.setState({
+        search: searchText,
+        go_search: true
+      });
+    }
   }
 
   render(){
