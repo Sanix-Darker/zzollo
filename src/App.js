@@ -27,6 +27,7 @@ class App extends Component {
       this.setState({go_search: true});
     else
       this.setState({go_search: false});
+      this.setState({search: event.target.value});
 
     this.setState({search: event.target.value});
   }
@@ -110,8 +111,10 @@ class App extends Component {
             <div className="row">
               <div className="col-md-12">
                     <input type="text"
+                        value={this.state.search}
                         className="search-zone"
                         onKeyDown = {(event) => this.handle_change(event)}
+                        onChange = {(event) => this.handle_change(event)}
                         placeholder="Search keyword(s) for open-source project(s)..."
                         />
                 </div>
