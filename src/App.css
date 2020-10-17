@@ -40,7 +40,7 @@ small{
 }
 
 .search-zone{
-  z-index: 9999;
+  z-index: 10;
   width: 100%;
   padding : 15px;
   font-size: 20px;
@@ -59,7 +59,7 @@ small{
 }
 
 .search-box{
-  z-index: 9999;
+  z-index: 10;
   background-color: #282c34;
   width: 82%;
   position: fixed;
