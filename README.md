@@ -1,8 +1,10 @@
 # Zolo
 
-A simple ReacJs-SearchEngine for Open-sources projects on Github, GitLab and Bitbucket !
+A simple ReactJs-SearchEngine for Open-sources projects on Github, GitLab and Bitbucket !
 
-<img src="./public/screenshot.png" />
+<a href="https://bit.ly/thezolo"><img src="./public/screenshot.png" /></a>
+
+<br>
 
 [DEMO-VIDEO](https://www.loom.com/share/6ffd428b077f4ffeb7c35f2f1d56d74b)
 
@@ -10,34 +12,47 @@ A simple ReacJs-SearchEngine for Open-sources projects on Github, GitLab and Bit
 
 ## Requirements
 
-- Yarn/Npm
+- yarn/npm
 - create-react-app
 
+## Clone the repository
+
+```zsh
+git clone https://github.com/Sanix-Darker/zolo.git
+
+cd zolo
+```
 
 ## How to install
 
 You just have to run :
-```shell
-# Using yarn or npm
-yarn install
-# or
+
+```zsh
+# Using yarn
+yarn
+
+# Using npm
 npm install
 ```
-
 
 ## How to launch
 
 You just have to run :
-```shell
-# Using yarn or npm
 
+```zsh
+# Using yarn
 yarn start
-# or
+
+# Using npm
 npm start
-# The application will be running on 
-# http://localhost:3007 
+
+# Using zolo.sh
+./zolo.sh
 ```
 
+## Application will be running on
+
+[http://localhost:3007](http://localhost:3007)
 
 ## How to contribute
 
@@ -47,9 +62,8 @@ Just follow these steps :
 - Fork the project.
 - Create a branch for your feature/update/fix(Make sure to have the latest master-branch updates).
 - Create a Pull Request to develop branch.
-- After a check, it will be verify and merge to the project.
-
+- After a check, it will be merged to the project.
 
 ## Author
 
-- Sanix-darker
+- [Sanix-darker](https://github.com/Sanix-Darker)
