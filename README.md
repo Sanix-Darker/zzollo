@@ -2,9 +2,9 @@
 
 A simple ReactJs-SearchEngine for Open-sources projects on Github, GitLab and Bitbucket !
 
-<a href=""><img src="./public/screenshot.png" /></a>
+<a href="https://bit.ly/thezolo"><img src="./public/screenshot.png" /></a>
 
-<br><br>
+<br>
 
 [DEMO-VIDEO](https://www.loom.com/share/6ffd428b077f4ffeb7c35f2f1d56d74b)
 
