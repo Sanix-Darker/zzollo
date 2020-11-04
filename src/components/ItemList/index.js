@@ -91,7 +91,7 @@ class ItemList extends Component {
         return new Promise((resolve, reject) =>{
             const linkToFetch = this.state.links[source]["link"] + search;
 
-            fetch((source === "github" || source === "gitlab") ? linkToFetch + "&page=" + page + "&per_page=200" : linkToFetch)
+            fetch((source === "github" || source === "gitlab") ? linkToFetch + "&page=" + page + "&per_page=100" : linkToFetch)
             .then(async response => {
                 const resData = await response.json();
                 const source_object = this.state.links[source];
@@ -120,7 +120,7 @@ class ItemList extends Component {
         this.getresults(items, "github", search, 1).then((returned_items) => {
             this.getresults(returned_items, "gitlab", search, 1).then((returned_items2) => {
                 this.getresults(returned_items2, "bitbucket", search, 1).then((res) => {
-                    console.log("[+] Fetchs ended !");
+                    console.log("[+] Fetches ended !");
                 })
             });
         });
