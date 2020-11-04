@@ -26,7 +26,7 @@ class ItemList extends Component {
      * @param {*} source_object 
      */
     pushNewItems(items, source, resData, source_object) {
-        resData.map((elt, index) => {
+        resData && resData.map((elt, index) => {
             const author = source_object["author"].split("|");
             const author_avatar = source_object["author_avatar"].split("|");
 
