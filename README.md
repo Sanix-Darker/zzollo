@@ -8,7 +8,7 @@ A simple ReactJs-SearchEngine for Open-sources projects on Github, GitLab and Bi
 
 [DEMO-VIDEO](https://www.loom.com/share/6ffd428b077f4ffeb7c35f2f1d56d74b)
 
-[SEARCH-ENGINE-LINK](https://bit.ly/thezolo)
+[SEARCH-ENGINE-LINK](https://zzolo.co)
 
 ## Requirements
 
