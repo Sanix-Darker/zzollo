@@ -16,11 +16,12 @@ class App extends Component {
       order: "all",
       go_search: false
     }
+    this.refText = React.createRef();
   }
 
   /**
-   * 
-   * @param {*} event 
+   *
+   * @param {*} event
    */
   handle_change(event){
     if (event.key === 'Enter')
@@ -33,9 +34,9 @@ class App extends Component {
   }
 
   /**
-   * 
-   * @param {*} event 
-   * @param {*} type 
+   *
+   * @param {*} event
+   * @param {*} type
    */
   handle_change_option(event, type){
 
@@ -70,7 +71,7 @@ class App extends Component {
   }
 
   /**
-   * 
+   *
    */
   go_search_change(){
     this.setState({
@@ -79,9 +80,9 @@ class App extends Component {
   }
 
   // get query parameter
-  getQueryStringValue (key) {  
-    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[.+*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
-  }  
+  getQueryStringValue (key) {
+    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[.+*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+  }
 
   componentDidMount(){
     const searchText = this.getQueryStringValue("q");
@@ -92,6 +93,7 @@ class App extends Component {
         go_search: true
       });
     }
+    this.refText.current.focus();
   }
 
   render(){
@@ -111,15 +113,23 @@ class App extends Component {
             <div className="row">
               <div className="col-md-12">
                     <input type="text"
+                        ref={this.refText}
                         value={this.state.search}
                         className="search-zone"
-                        onKeyDown = {(event) => this.handle_change(event)}
+                        onKeyDown = {
+                            (event) => {
+                                if (event.keyCode === 13){
+                                    window.document.location.href = "?q=" + this.state.search;
+                                }
+                                this.handle_change(event);
+                            }
+                        }
                         onChange = {(event) => this.handle_change(event)}
                         placeholder="Search keyword(s) for open-source project(s)..."
                         />
                 </div>
-							</div>
-							<div className="row">
+            </div>
+			<div className="row">
               <div className="col-md-3 zone">
                     <select className="language-zone"
                             defaultValue="all"
@@ -160,11 +170,11 @@ class App extends Component {
               </div>
           </div>
           <br/>
-          <ItemList search={this.state.search} 
-                    source={this.state.source} 
-                    language={this.state.language} 
-                    sort={this.state.sort} 
-                    order={this.state.order} 
+          <ItemList search={this.state.search}
+                    source={this.state.source}
+                    language={this.state.language}
+                    sort={this.state.sort}
+                    order={this.state.order}
                     go_search={this.state.go_search}/>
         </header>
       </div>
