@@ -15,6 +15,10 @@
 		cursor: pointer;
 }
 
+.Item-Single a{
+    text-decoration: none;
+}
+
 .Item-Single:hover{
     z-index: 10000;
     transform: scale(1.3);
