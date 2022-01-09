@@ -19,11 +19,11 @@ class ItemList extends Component {
     }
 
     /**
-     * 
-     * @param {*} items 
-     * @param {*} source 
-     * @param {*} resData 
-     * @param {*} source_object 
+     *
+     * @param {*} items
+     * @param {*} source
+     * @param {*} resData
+     * @param {*} source_object
      */
     pushNewItems(items, source, resData, source_object) {
         resData && resData.map((elt, index) => {
@@ -45,11 +45,11 @@ class ItemList extends Component {
                     "description": elt[source_object["description"]]
                 });
             }else if (source === "gitlab"){
-                let avatar=""; 
-                if (typeof(elt[author_avatar[0]][author_avatar[1]]) != "undefined" && 
+                let avatar="";
+                if (typeof(elt[author_avatar[0]][author_avatar[1]]) != "undefined" &&
                     elt[author_avatar[0]][author_avatar[1]] != null){
                         avatar = (elt[author_avatar[0]][author_avatar[1]].indexOf("http") === -1) ?
-                                    "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] : 
+                                    "https://gitlab.com" + elt[author_avatar[0]][author_avatar[1]] :
                                     elt[author_avatar[0]][author_avatar[1]];
                 }
                 items.push({
@@ -81,11 +81,11 @@ class ItemList extends Component {
     }
 
     /**
-     * 
-     * @param {*} items 
-     * @param {*} source 
-     * @param {*} search 
-     * @param {*} page 
+     *
+     * @param {*} items
+     * @param {*} source
+     * @param {*} search
+     * @param {*} page
      */
     getresults(items, source, search, page){
         return new Promise((resolve, reject) =>{
@@ -95,10 +95,10 @@ class ItemList extends Component {
             .then(async response => {
                 const resData = await response.json();
                 const source_object = this.state.links[source];
-                
-                items = this.pushNewItems(items, 
-                    source, 
-                    (source === "github" ? resData["items"] : source === "bitbucket" ? resData["values"] : resData), 
+
+                items = this.pushNewItems(items,
+                    source,
+                    (source === "github" ? resData["items"] : source === "bitbucket" ? resData["values"] : resData),
                     source_object
                 );
                 resolve(items);
@@ -110,8 +110,8 @@ class ItemList extends Component {
     }
 
     /**
-     * 
-     * @param {*} search 
+     *
+     * @param {*} search
      */
     fetch_projects = (search) => {
         search = search.toLowerCase();
@@ -206,9 +206,9 @@ class ItemList extends Component {
     }
 
     /**
-     * 
-     * @param {*} items 
-     * @param {*} param1 
+     *
+     * @param {*} items
+     * @param {*} param1
      */
     filterItemsByLanguage(items, { language: selectedLanguage }) {
         if (selectedLanguage === "all") {
@@ -222,12 +222,12 @@ class ItemList extends Component {
     }
 
     /**
-     * 
+     *
      */
     getItemsComponents(){
         const items = this.filterItemsByLanguage(this.state.items, this.props);
         return (<div style={{"display": "flex", "flexWrap": "wrap","justifyContent":"space-around"}}>
-                            {items.length > 0 ? 
+                            {items.length > 0 ?
                                 items.map(
                                     (elt, index) => {
                                         return (<Item key={index}
@@ -236,7 +236,7 @@ class ItemList extends Component {
                                                         author_avatar={elt.author_avatar} language={elt.language}
                                                         stars={elt.stars} issues={elt.issues}
                                                         forks={elt.forks} description={elt.description}/>)
-                                    }) : 
+                                    }) :
                                 (<center>
                                     <h1>No results found !!!</h1>
                                 </center>)
@@ -249,22 +249,26 @@ class ItemList extends Component {
             <div>
                 <center>
                     <div className="Item-List">
-                        <div style={{"width":"100%", "textAlign": "center"}}>
-                            <span>[+] Showing bests {this.state.count} results for&nbsp; 
-                                     {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
-                                     &nbsp;{this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
-                            </span>
-                        </div>
+                        {this.state.count > 0 ?
+
+                            <div style={{"width":"100%", "textAlign": "center"}}>
+                                <br/>
+                                <span>[+] Showing bests {this.state.count} results for&nbsp;
+                                             {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
+                                             &nbsp;{this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
+                                    </span>
+                            </div>
+                        : null}
                         <br/>
-                        
+
                         {
-                            ((this.props.search === '' || this.props.go_search === false) && this.state.load) ? 
+                            ((this.props.search === '' || this.props.go_search === false) && this.state.load) ?
                                 (<div>
-                                    <img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862" 
+                                    <img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862"
                                                 style={{maxWidth: "100%", borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}} alt=""/>
                                 </div>) :
-                                (this.state.load ? 
-                                    (<img src="/loading.gif" alt=""/>) 
+                                (this.state.load ?
+                                    (<img src="/loading.gif" alt=""/>)
                                     : this.getItemsComponents())
                         }
                     </div>

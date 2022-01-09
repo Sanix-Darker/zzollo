@@ -105,7 +105,7 @@ class App extends Component {
                 <a href="github.com/sanix-darker" title="By Sanix-darker">
                   <img alt="" src="https://avatars1.githubusercontent.com/u/22576758?s=60&v=4" style={{"borderRadius": "100%", "width": "2em"}}/>
                 </a>
-                <a href="/" style={{"color": "white", "textDecoration": "none"}}><code>Z0l0</code></a>
+                <a href="/" style={{"color": "white", "textDecoration": "none"}}><code>Zz0ll0</code></a>
               <small> Search open-source projects on github / gitlab / bitbucket.
               <a href="https://github.com/sanix-darker/zolo" style={{"color": "white", "float":"right", "textDecoration": "none"}}>[Project-link]</a></small>
             </p>
