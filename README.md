@@ -8,7 +8,7 @@ A simple ReactJs-SearchEngine for Open-sources projects on Github, GitLab and Bi
 
 [DEMO-VIDEO](https://www.loom.com/share/6ffd428b077f4ffeb7c35f2f1d56d74b)
 
-[SEARCH-ENGINE-LINK](https://zzolo.co)
+[SEARCH-ENGINE-LINK](https://zzollo.co)
 
 ## Requirements
 
@@ -18,9 +18,9 @@ A simple ReactJs-SearchEngine for Open-sources projects on Github, GitLab and Bi
 ## Clone the repository
 
 ```zsh
-git clone https://github.com/Sanix-Darker/zolo.git
+git clone https://github.com/Sanix-Darker/zzollo.git
 
-cd zolo
+cd zzollo
 ```
 
 ## How to install
