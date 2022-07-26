@@ -345,7 +345,8 @@ XSLT
 Xtend
 YAML
 Zephir
-Zimpl`;
+Zimpl
+Zig`;
 
 const lgs = langs.split("\n");
 let LanguagesOption = [];
