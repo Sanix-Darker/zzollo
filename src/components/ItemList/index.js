@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import './ItemList.css';
 import Item from '../Item';
+import Pagination from '../Pagination';
 import { linkSelector } from '../utils/js/Selectors'
 // import axios from 'axios';
 
+let PageSize = 12;
 class ItemList extends Component {
 
     constructor() {
@@ -14,7 +16,8 @@ class ItemList extends Component {
             items: [],
             itemsOrig: [],
             load: true,
-            count: 0
+            count: 0,
+            currentPage: 1
         }
     }
 
@@ -220,28 +223,46 @@ class ItemList extends Component {
             return language?.toLowerCase() === selectedLanguage?.toLowerCase();
         });
     }
-
+    /**
+     * 
+     * @param {*} items
+     */
+    getItemsByPage(items){
+        const firstPageIndex = (this.state.currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+        return items.slice(firstPageIndex, lastPageIndex);
+    }
     /**
      *
      */
     getItemsComponents(){
-        const items = this.filterItemsByLanguage(this.state.items, this.props);
-        return (<div style={{"display": "flex", "flexWrap": "wrap","justifyContent":"space-around"}}>
-                            {items.length > 0 ?
-                                items.map(
-                                    (elt, index) => {
-                                        return (<Item key={index}
-                                                        source={elt.source} url={elt.url}
-                                                        title={elt.title} author={elt.author}
-                                                        author_avatar={elt.author_avatar} language={elt.language}
-                                                        stars={elt.stars} issues={elt.issues}
-                                                        forks={elt.forks} description={elt.description}/>)
-                                    }) :
-                                (<center>
-                                    <h1>No results found !!!</h1>
-                                </center>)
-                            }
-                        </div>);
+        const itemsFilter = this.filterItemsByLanguage(this.state.items, this.props);
+        const items = this.getItemsByPage(itemsFilter);
+        return (
+            <div>
+                <div style={{"display": "flex", "flexWrap": "wrap","justifyContent":"space-around"}}>
+                    {
+                        items.length > 0 ?
+                        items.map( (elt, index) => {
+                            return (<Item key={index}
+                                source={elt.source} url={elt.url}
+                                title={elt.title} author={elt.author}
+                                author_avatar={elt.author_avatar} language={elt.language}
+                                stars={elt.stars} issues={elt.issues}
+                                forks={elt.forks} description={elt.description}/>)
+                            }) :
+                        (<center><h1>No results found !!!</h1></center>)
+                    }
+                </div>
+                <Pagination
+                    className="pagination-bar"
+                    currentPage={this.state.currentPage}
+                    totalCount={this.state.items.length}
+                    pageSize={PageSize}
+                    onPageChange={page => this.setState({currentPage: page})}
+                />
+            </div>
+        );
     }
 
     render() {
@@ -249,27 +270,25 @@ class ItemList extends Component {
             <div>
                 <center>
                     <div className="Item-List">
-                        {this.state.count > 0 ?
-
-                            <div style={{"width":"100%", "textAlign": "center"}}>
-                                <br/>
-                                <span>[+] Showing bests {this.state.count} results for&nbsp;
-                                             {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
-                                             &nbsp;{this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
-                                    </span>
-                            </div>
-                        : null}
-                        <br/>
-
                         {
-                            ((this.props.search === '' || this.props.go_search === false) && this.state.load) ?
-                                (<div>
-                                    <img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862"
-                                                style={{maxWidth: "100%", borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}} alt=""/>
-                                </div>) :
-                                (this.state.load ?
-                                    (<img src="/loading.gif" alt=""/>)
-                                    : this.getItemsComponents())
+                            this.state.count > 0 ?
+                                <div style={{"width":"100%", "textAlign": "center"}}>
+                                    <br/>
+                                    <span>[+] Showing bests {this.state.count} results for &nbsp;
+                                                {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
+                                                &nbsp;
+                                                {this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
+                                    </span>
+                                </div>
+                            : null
+                        }
+                        <br/>
+                        {
+                            (
+                                (this.props.search === '' || this.props.go_search === false) && this.state.load) ?
+                                (<div><img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862" style={{maxWidth: "100%", borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}} alt=""/></div>) :
+                                (this.state.load ? (<img src="/loading.gif" alt=""/>) : this.getItemsComponents()
+                            )
                         }
                     </div>
                 </center>

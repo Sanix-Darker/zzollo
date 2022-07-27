@@ -129,7 +129,7 @@ class App extends Component {
                         />
                 </div>
             </div>
-			<div className="row">
+            <div className="row">
               <div className="col-md-3 zone">
                     <select className="language-zone"
                             defaultValue="all"
@@ -139,35 +139,35 @@ class App extends Component {
                       <option value="gitlab">GitLab</option>
                       <option value="bitbucket">BitBucket</option>
                     </select>
-                </div>
-                <div className="col-md-3 zone">
-                    <select className="language-zone"
-                            defaultValue="all"
-                            onChange = {(event) => this.handle_change_option(event, "lang")}>
-                      <option value="all">By languages</option>
-                      {LanguagesOption}
-                    </select>
-                </div>
-                <div className="col-md-3 zone">
-                    <select className="sort-zone"
-                            defaultValue="all"
-                            onChange = {(event) => this.handle_change_option(event, "sort")}>
-                      <option value="all">By (Stars / Issues / fork)</option>
-                      <option value="star">Sort by Stars</option>
-                      <option value="issue">Sort by Issues</option>
-                      <option value="fork">Sort by Forks</option>
-                    </select>
-                </div>
-                <div className="col-md-3 zone">
-                    <select className="order-zone"
-                            defaultValue="all"
-                            onChange = {(event) => this.handle_change_option(event, "order")}>
-                      <option value="all">Filter by (Acsending/Descending))</option>
-                      <option value="asc">Ascending order</option>
-                      <option value="desc">Descending order</option>
-                    </select>
-                </div>
               </div>
+              <div className="col-md-3 zone">
+                  <select className="language-zone"
+                          defaultValue="all"
+                          onChange = {(event) => this.handle_change_option(event, "lang")}>
+                    <option value="all">By languages</option>
+                    {LanguagesOption}
+                  </select>
+              </div>
+              <div className="col-md-3 zone">
+                  <select className="sort-zone"
+                          defaultValue="all"
+                          onChange = {(event) => this.handle_change_option(event, "sort")}>
+                    <option value="all">By (Stars / Issues / fork)</option>
+                    <option value="star">Sort by Stars</option>
+                    <option value="issue">Sort by Issues</option>
+                    <option value="fork">Sort by Forks</option>
+                  </select>
+              </div>
+              <div className="col-md-3 zone">
+                  <select className="order-zone"
+                          defaultValue="all"
+                          onChange = {(event) => this.handle_change_option(event, "order")}>
+                    <option value="all">Filter by (Acsending/Descending))</option>
+                    <option value="asc">Ascending order</option>
+                    <option value="desc">Descending order</option>
+                  </select>
+              </div>
+            </div>
           </div>
           <br/>
           <ItemList search={this.state.search}
