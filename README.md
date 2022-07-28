@@ -2,7 +2,7 @@
 
 A simple ReactJs-SearchEngine for Open-sources projects on Github, GitLab and Bitbucket !
 
-<a href="https://bit.ly/thezolo"><img src="./public/screenshot.png" /></a>
+<a href="https://zzollo.co"><img src="./public/screenshot.png" /></a>
 
 <br>
 
