@@ -7,14 +7,15 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.3.0",
+    "classnames": "^2.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"
   },
   "scripts": {
-    "start": "PORT=3007 react-scripts start",
-    "build": "PORT=3007 react-scripts build",
-    "test": "PORT=3007 react-scripts test",
+    "start": "set PORT=3007 && react-scripts start",
+    "build": "set PORT=3007 && react-scripts build",
+    "test": "set PORT=3007 && react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
