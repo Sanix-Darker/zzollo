@@ -13,9 +13,9 @@
     "react-scripts": "^5.0.1"
   },
   "scripts": {
-    "start": "set PORT=3007 && react-scripts start",
-    "build": "set PORT=3007 && react-scripts build",
-    "test": "set PORT=3007 && react-scripts test",
+    "start": "cross-env PORT=3007 && react-scripts start",
+    "build": "cross-env PORT=3007 && react-scripts build",
+    "test": "cross-env PORT=3007 && react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -32,5 +32,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
