@@ -6,6 +6,7 @@ import './pagination.css';
 const Pagination = props => {
   const {
     onPageChange,
+    onViewAll,
     totalCount,
     siblingCount = 1,
     currentPage,
@@ -31,6 +32,10 @@ const Pagination = props => {
   const onPrevious = () => {
     onPageChange(currentPage - 1);
   };
+
+  const onDisplayAll = () => {
+    onViewAll(totalCount);
+  }
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
@@ -70,6 +75,7 @@ const Pagination = props => {
       >
         <div className="arrow right" />
       </li>
+      <button onClick={onDisplayAll}>Get All</button>
     </ul>
   );
 };

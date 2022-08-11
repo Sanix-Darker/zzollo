@@ -5,7 +5,6 @@ import Pagination from '../Pagination';
 import { linkSelector } from '../utils/js/Selectors'
 // import axios from 'axios';
 
-let PageSize = 12;
 class ItemList extends Component {
 
     constructor() {
@@ -17,6 +16,7 @@ class ItemList extends Component {
             itemsOrig: [],
             load: true,
             count: 0,
+            pageSize: 12,
             currentPage: 1
         }
     }
@@ -228,8 +228,8 @@ class ItemList extends Component {
      * @param {*} items
      */
     getItemsByPage(items){
-        const firstPageIndex = (this.state.currentPage - 1) * PageSize;
-        const lastPageIndex = firstPageIndex + PageSize;
+        const firstPageIndex = (this.state.currentPage - 1) * this.state.pageSize;
+        const lastPageIndex = firstPageIndex + this.state.pageSize;
         return items.slice(firstPageIndex, lastPageIndex);
     }
     /**
@@ -258,8 +258,9 @@ class ItemList extends Component {
                     className="pagination-bar"
                     currentPage={this.state.currentPage}
                     totalCount={this.state.items.length}
-                    pageSize={PageSize}
+                    pageSize={this.state.pageSize}
                     onPageChange={page => this.setState({currentPage: page})}
+                    onViewAll={itemCount => this.setState({pageSize: itemCount})}
                 />
             </div>
         );
