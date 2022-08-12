@@ -77,7 +77,7 @@ const Pagination = props => {
           <div className="arrow right" />
         </li>
       </ul>
-      <button className='button-get-all' onClick={onDisplayAll}>Get All Results</button>
+      <button title='Click here to see research results without pagination' className='button-get-all' onClick={onDisplayAll}>See All Results</button>
     </div>
   );
 };
