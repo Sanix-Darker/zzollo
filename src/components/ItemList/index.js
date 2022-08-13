@@ -224,7 +224,7 @@ class ItemList extends Component {
         });
     }
     /**
-     * 
+     *
      * @param {*} items
      */
     getItemsByPage(items){
@@ -275,21 +275,23 @@ class ItemList extends Component {
                             this.state.count > 0 ?
                                 <div style={{"width":"100%", "textAlign": "center"}}>
                                     <br/>
-                                    <span>[+] Showing bests {this.state.count} results for &nbsp;
-                                                {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
-                                                &nbsp;
-                                                {this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
+                                    <span>
+                                        [+] Showing bests {this.state.count} results for &nbsp;
+                                        {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
+                                        &nbsp;
+                                        {this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
                                     </span>
                                 </div>
                             : null
                         }
                         <br/>
                         {
-                            (
-                                (this.props.search === '' || this.props.go_search === false) && this.state.load) ?
-                                (<div><img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862" style={{maxWidth: "100%", borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}} alt=""/></div>) :
-                                (this.state.load ? (<img src="/loading.gif" alt=""/>) : this.getItemsComponents()
-                            )
+                            (this.props.search === '' || this.props.go_search === false) && this.state.load ?
+                            <div>
+                                <img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862"
+                                    style={{maxWidth: "100%", borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}}
+                                    alt=""/>
+                            </div> : this.state.load ? <img src="/loading.gif" alt=""/> : this.getItemsComponents()
                         }
                     </div>
                 </center>

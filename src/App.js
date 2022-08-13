@@ -97,17 +97,21 @@ class App extends Component {
   }
 
   render(){
+    const linkStyleNone = {"color": "white", "textDecoration": "none"};
     return (
       <div className="App">
         <header className="App-header">
           <div className="search-box">
             <p className="head">
-                <a href="github.com/sanix-darker" title="By Sanix-darker">
-                  <img alt="" src="https://avatars1.githubusercontent.com/u/22576758?s=60&v=4" style={{"borderRadius": "100%", "width": "2em"}}/>
-                </a>
-                <a href="/" style={{"color": "white", "textDecoration": "none"}}><code>Zz0ll0</code></a>
-              <small> Search open-source projects on github / gitlab / bitbucket.
-              <a href="https://github.com/sanix-darker/zolo" style={{"color": "white", "float":"right", "textDecoration": "none"}}>[Project-link]</a></small>
+                <a href="/" style={linkStyleNone}><code>Zz0ll0</code></a>
+                <small>
+                    Search open-source projects on github / gitlab / bitbucket. &nbsp;
+                </small>
+                <b>
+                    <a href="https://github.com/sanix-darker/zolo" style={linkStyleNone}>
+                        [Project-link]
+                    </a>
+                </b>
             </p>
 
             <div className="row">
@@ -116,11 +120,10 @@ class App extends Component {
                         ref={this.refText}
                         value={this.state.search}
                         className="search-zone"
-                        onKeyDown = {
+                        onKeyup = {
                             (event) => {
-                                if (event.keyCode === 13){
+                                if (event.keyCode === 13)
                                     window.document.location.href = "?q=" + this.state.search;
-                                }
                                 this.handle_change(event);
                             }
                         }
