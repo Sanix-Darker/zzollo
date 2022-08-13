@@ -55,3 +55,19 @@
   background-color: transparent;
   cursor: default;
 }
+
+.button-get-all {
+    padding: 0.5em 1em;
+    background: #393d44;
+    border: 0px solid white;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.button-get-all:hover {
+    background: white;
+    border: 0px solid white;
+    color: #393d44;
+}
