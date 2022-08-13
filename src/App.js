@@ -97,17 +97,19 @@ class App extends Component {
   }
 
   render(){
+    const linkStyleNone = {"color": "white", "textDecoration": "none"};
     return (
       <div className="App">
         <header className="App-header">
           <div className="search-box">
             <p className="head">
-                <a href="github.com/sanix-darker" title="By Sanix-darker">
-                  <img alt="" src="https://avatars1.githubusercontent.com/u/22576758?s=60&v=4" style={{"borderRadius": "100%", "width": "2em"}}/>
-                </a>
-                <a href="/" style={{"color": "white", "textDecoration": "none"}}><code>Zz0ll0</code></a>
-              <small> Search open-source projects on github / gitlab / bitbucket.
-              <a href="https://github.com/sanix-darker/zolo" style={{"color": "white", "float":"right", "textDecoration": "none"}}>[Project-link]</a></small>
+                <a href="/" style={linkStyleNone}><code>Zz0ll0</code></a>
+                <small>
+                    Search open-source projects on github / gitlab / bitbucket. &nbsp;
+                    <a href="https://github.com/sanix-darker/zolo"
+                        style={linkStyleNone}> [Project-link]
+                    </a>
+                </small>
             </p>
 
             <div className="row">
