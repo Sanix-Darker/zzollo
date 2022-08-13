@@ -65,7 +65,7 @@
 /* On screens that are 992px or less, set the background color to blue */
 @media screen and (max-width: 992px) {
     .Item-Single{
-        width: 33%;
+        width: 48%;
     }
     .Item-Single:hover{
         box-shadow: 0 15px 23px rgba(0,0,0,0.7);
@@ -73,9 +73,15 @@
     }
 }
 
-/* On screens that are 600px or less, set the background color to olive */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 950px) {
     .Item-Single{
-        width: 99%;
+        width: 48%;
+    }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 800px) {
+    .Item-Single{
+        width: 97%;
     }
 }
