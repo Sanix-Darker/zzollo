@@ -106,10 +106,12 @@ class App extends Component {
                 <a href="/" style={linkStyleNone}><code>Zz0ll0</code></a>
                 <small>
                     Search open-source projects on github / gitlab / bitbucket. &nbsp;
-                    <a href="https://github.com/sanix-darker/zolo"
-                        style={linkStyleNone}> [Project-link]
-                    </a>
                 </small>
+                <b>
+                    <a href="https://github.com/sanix-darker/zolo" style={linkStyleNone}>
+                        [Project-link]
+                    </a>
+                </b>
             </p>
 
             <div className="row">
@@ -118,11 +120,10 @@ class App extends Component {
                         ref={this.refText}
                         value={this.state.search}
                         className="search-zone"
-                        onKeyDown = {
+                        onKeyup = {
                             (event) => {
-                                if (event.keyCode === 13){
+                                if (event.keyCode === 13)
                                     window.document.location.href = "?q=" + this.state.search;
-                                }
                                 this.handle_change(event);
                             }
                         }
