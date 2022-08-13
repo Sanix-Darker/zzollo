@@ -73,11 +73,11 @@ small{
   }
   .search-zone{
     width: 96%;
-	}
-	.zone{
-		width: 96%;
-		margin-bottom: 4px;
-	}
+  }
+  .zone{
+	width: 96%;
+	margin-bottom: 4px;
+   }
 }
 
 /* On screens that are 600px or less, set the background color to olive */
