@@ -120,7 +120,7 @@ class App extends Component {
                         ref={this.refText}
                         value={this.state.search}
                         className="search-zone"
-                        onKeyup = {
+                        onKeyUp = {
                             (event) => {
                                 if (event.keyCode === 13)
                                     window.document.location.href = "?q=" + this.state.search;
