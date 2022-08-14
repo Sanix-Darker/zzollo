@@ -39,34 +39,10 @@ class App extends Component {
    * @param {*} type
    */
   handle_change_option(event, type){
-
-    switch(type) {
-      case "source":
-        this.setState({
-          source: event.target.selectedOptions[0].value,
-          go_search: true
-        });
-        break;
-      case "lang":
-        this.setState({
-          language: event.target.selectedOptions[0].value,
-          go_search: true
-        });
-        break;
-      case "sort":
-        this.setState({
-          sort: event.target.selectedOptions[0].value,
-          go_search: true
-        });
-        break;
-      case "order":
-        this.setState({
-          order: event.target.selectedOptions[0].value,
-          go_search: true
-        })
-        break;
-      default:
-        console.log("Nothing to do....")
+    if (["source", "lang", "sort", "order"].indexOf(type) !== -1){
+        let toUpdate = {"go_search": true}
+        toUpdate[type] = event.target.value
+        this.setState(toUpdate);
     }
   }
 
@@ -81,7 +57,15 @@ class App extends Component {
 
   // get query parameter
   getQueryStringValue (key) {
-    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[.+*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    return decodeURIComponent(
+        window.location.search.replace(
+            new RegExp(
+                "^(?:.*[&\\?]" +
+                encodeURIComponent(key).replace(/[.+*]/g, "\\$&") +
+                "(?:\\=([^&]*))?)?.*$", "i"
+            ), "$1"
+        )
+    );
   }
 
   componentDidMount(){
