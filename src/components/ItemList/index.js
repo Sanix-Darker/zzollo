@@ -3,7 +3,7 @@ import './ItemList.css';
 import Item from '../Item';
 import Pagination from '../Pagination';
 import { linkSelector } from '../utils/js/Selectors'
-// import axios from 'axios';
+
 
 class ItemList extends Component {
 
@@ -21,13 +21,6 @@ class ItemList extends Component {
         }
     }
 
-    /**
-     *
-     * @param {*} items
-     * @param {*} source
-     * @param {*} resData
-     * @param {*} source_object
-     */
     pushNewItems(items, source, resData, source_object) {
         resData && resData.map((elt, index) => {
             const author = source_object["author"].split("|");
@@ -83,13 +76,6 @@ class ItemList extends Component {
         return items;
     }
 
-    /**
-     *
-     * @param {*} items
-     * @param {*} source
-     * @param {*} search
-     * @param {*} page
-     */
     getresults(items, source, search, page){
         return new Promise((resolve, reject) =>{
             const linkToFetch = this.state.links[source]["link"] + search;
@@ -112,10 +98,6 @@ class ItemList extends Component {
         });
     }
 
-    /**
-     *
-     * @param {*} search
-     */
     fetch_projects = (search) => {
         search = search.toLowerCase();
         let items = [];
@@ -128,7 +110,6 @@ class ItemList extends Component {
             });
         });
     }
-
 
     componentWillReceiveProps = (nextProps) => {
         if (nextProps.go_search === true){
@@ -208,11 +189,6 @@ class ItemList extends Component {
         }
     }
 
-    /**
-     *
-     * @param {*} items
-     * @param {*} param1
-     */
     filterItemsByLanguage(items, { language: selectedLanguage }) {
         if (selectedLanguage === "all") {
             return items;
@@ -223,18 +199,13 @@ class ItemList extends Component {
             return language?.toLowerCase() === selectedLanguage?.toLowerCase();
         });
     }
-    /**
-     *
-     * @param {*} items
-     */
+
     getItemsByPage(items){
         const firstPageIndex = (this.state.currentPage - 1) * this.state.pageSize;
         const lastPageIndex = firstPageIndex + this.state.pageSize;
         return items.slice(firstPageIndex, lastPageIndex);
     }
-    /**
-     *
-     */
+
     getItemsComponents(){
         const itemsFilter = this.filterItemsByLanguage(this.state.items, this.props);
         const items = this.getItemsByPage(itemsFilter);
