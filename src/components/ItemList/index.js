@@ -246,12 +246,7 @@ class ItemList extends Component {
                             this.state.count > 0 ?
                                 <div style={{"width":"100%", "textAlign": "center"}}>
                                     <br/>
-                                    <span>
-                                        [+] Showing bests {this.state.count} results for &nbsp;
-                                        {this.props.search.length === 0 ? "''": "'"+this.props.search+"'"}
-                                        &nbsp;
-                                        {this.props.language !== "all" ? "{ "+this.props.language+" }": null}.
-                                    </span>
+                                    <span> Found {this.state.count} results. </span>
                                 </div>
                             : null
                         }
@@ -259,10 +254,10 @@ class ItemList extends Component {
                         {
                             (this.props.search === '' || this.props.go_search === false) && this.state.load ?
                             <div>
-                                <img src="https://media1.tenor.com/images/551d452e9eb7377fd4d189bf905a61f3/tenor.gif?itemid=5588862"
-                                    style={{maxWidth: "100%", borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}}
-                                    alt=""/>
-                            </div> : this.state.load ? <img src="/loading.gif" alt=""/> : this.getItemsComponents()
+                            <br/>
+                                <img src="/imgs/cat.gif" alt=""/>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fillOpacity="1" d="M0,32L21.8,64C43.6,96,87,160,131,165.3C174.5,171,218,117,262,133.3C305.5,149,349,235,393,272C436.4,309,480,299,524,266.7C567.3,235,611,181,655,186.7C698.2,192,742,256,785,256C829.1,256,873,192,916,149.3C960,107,1004,85,1047,80C1090.9,75,1135,85,1178,117.3C1221.8,149,1265,203,1309,234.7C1352.7,267,1396,277,1418,282.7L1440,288L1440,320L1418.2,320C1396.4,320,1353,320,1309,320C1265.5,320,1222,320,1178,320C1134.5,320,1091,320,1047,320C1003.6,320,960,320,916,320C872.7,320,829,320,785,320C741.8,320,698,320,655,320C610.9,320,567,320,524,320C480,320,436,320,393,320C349.1,320,305,320,262,320C218.2,320,175,320,131,320C87.3,320,44,320,22,320L0,320Z" style={{"--darkreader-inline-fill":"#181a1b;"}} data-darkreader-inline-fill=""></path></svg>
+                            </div> : this.state.load ? <div> <br/><img src="/imgs/loading.gif" style={{maxWidth: "100%", width: "20em",  borderRadius: "100%", boxShadow: "0 3px 7px rgba(0,0,0,0.54)"}}alt=""/></div>: this.getItemsComponents()
                         }
                     </div>
                 </center>
