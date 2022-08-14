@@ -47,16 +47,20 @@ const Item = (props) => {
         </table>
       </div>
       <p className="Item-Description">
-        {(props.description != null) ? ((props.description.length > 67) ? props.description.substring(0, 67) + "..." : props.description) : "No Description here"}
+        {
+            (props.description != null) ?
+                (props.description.length > 67) ?
+                    props.description.substring(0, 67) + "..."
+                : props.description
+            : "No Description here"
+        }
       </p>
 
       <div className="details">
         <i>
-          <b style={{"fontSize":"15px"}}>
-            {props.language}
-          </b>,
-          <b>{printZeroIfNan(props.stars)}</b> stars,
-          <b>{printZeroIfNan(props.forks)}</b> forks ||
+          <b style={{"fontSize":"15px"}}> {props.language} </b>,
+          <b>{printZeroIfNan(props.stars)}</b> stars |
+          <b>{printZeroIfNan(props.forks)}</b> forks |
           <b>{printZeroIfNan(props.issues)}</b>issues</i>
       </div>
     </div>
