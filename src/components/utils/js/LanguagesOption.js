@@ -9,8 +9,6 @@ CSS
 Go
 Haskell
 HTML
-Java
-JavaScript
 Lua
 Matlab
 Objective-C
@@ -164,7 +162,7 @@ Java
 JavaScript
 Jade
 Jasmin
-Java Server Pages
+JSP
 JSON
 JSON5
 JSONiq
@@ -348,12 +346,8 @@ Zephir
 Zimpl
 Zig`;
 
-const lgs = langs.split("\n");
-let LanguagesOption = [];
-let i = 0;
-for (const lang of lgs){
-    i++;
-    LanguagesOption.push(<option key={i} value={lang}>{lang}</option>);
-}
+let LanguagesOption = langs.split("\n").map(
+    (lang, i) => <option key={i} value={lang}>{lang}</option>
+)
 
 export default LanguagesOption;
