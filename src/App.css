@@ -49,7 +49,7 @@ small{
 	margin-bottom: 20px;
 }
 
-.language-zone, .order-zone, .sort-zone{
+.source-zone, .language-zone, .order-zone, .sort-zone{
   width: 100%;
   padding: 15px;
   border: 0px;

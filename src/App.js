@@ -39,9 +39,9 @@ class App extends Component {
    * @param {*} type
    */
   handle_change_option(event, type){
-    if (["source", "lang", "sort", "order"].indexOf(type) !== -1){
+    if (["source", "language", "sort", "order"].indexOf(type) !== -1){
         let toUpdate = {"go_search": true}
-        toUpdate[type] = event.target.value
+        toUpdate[type] = event.target.value !== '' ? event.target.value : 'all'
         this.setState(toUpdate);
     }
   }
@@ -116,9 +116,9 @@ class App extends Component {
             </div>
             <div className="row">
               <div className="col-md-3 zone">
-                    <input list="source" defaultValue=""
+                    <input list="source"
                             placeholder="From [Github / GitLab / Bitbucket]"
-                            className="language-zone"
+                            className="source-zone"
                             onKeyUp = {(event) => this.handle_change_option(event, "source")}/>
                     <datalist id="source">
                       <option value="all">From [Github / GitLab / Bitbucket]</option>
@@ -128,16 +128,16 @@ class App extends Component {
                     </datalist>
               </div>
               <div className="col-md-3 zone">
-                    <input list="languages" defaultValue="" className="language-zone"
+                    <input list="languages" className="language-zone"
                             placeholder="Filter by languages"
-                            onKeyUp = {(event) => this.handle_change_option(event, "lang")}/>
+                            onKeyUp = {(event) => this.handle_change_option(event, "language")}/>
                     <datalist id="languages">
                         <option value="all">By languages</option>
                         {LanguagesOption}
                     </datalist>
               </div>
               <div className="col-md-3 zone">
-                  <input list="sort" className="sort-zone" defaultValue=""
+                  <input list="sort" className="sort-zone"
                             placeholder="Filter By (Stars / Issues / fork)"
                             onKeyUp = {(event) => this.handle_change_option(event, "sort")}/>
                     <datalist id="sort">
@@ -160,7 +160,6 @@ class App extends Component {
               </div>
             </div>
           </div>
-          <br/>
           <ItemList search={this.state.search}
                     source={this.state.source}
                     language={this.state.language}
