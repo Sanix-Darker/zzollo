@@ -14,6 +14,7 @@ class App extends Component {
       sort: "all",
       order: "all",
       go_search: false,
+      collapseFilters: false, // Add state to handle show/hide filters
     };
     this.refText = React.createRef();
   }
@@ -50,6 +51,17 @@ class App extends Component {
     this.setState({
       go_search: !this.state.go_search,
     });
+  }
+
+  /**
+   *
+   */
+  // handle hide/show filters on Click
+  handleClick() {
+    this.setState((prevState) => ({
+      ...prevState,
+      collapseFilters: !prevState.collapseFilters,
+    }));
   }
 
   // get query parameter
@@ -116,6 +128,7 @@ class App extends Component {
                     this.handle_change(event);
                   }}
                   onChange={(event) => this.handle_change(event)}
+                  onClick={() => this.handleClick()} // handle hide/show filters on Click
                   placeholder="Search keyword(s) for open-source project(s)..."
                 />
               </div>
