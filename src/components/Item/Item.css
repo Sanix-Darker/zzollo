@@ -21,9 +21,10 @@
 
 .Item-Single:hover{
     z-index: 10000;
-    transform: scale(1.3);
+    transform: scale(1.045);
     box-shadow: 0 15px 23px rgba(0,0,0,0.7);
     transition: 0.3s;
+    z-index: 0;
 }
 
 .Item-Title{
