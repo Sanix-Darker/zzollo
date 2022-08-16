@@ -61,21 +61,14 @@ small{
 .search-box{
   z-index: 10;
   background-color: #282c34;
-  width: 82%;
-  position: fixed;
+  width: 100%;
+  position: relative;
   top: 0px;
 }
 
 /* On screens that are 992px or less, set the background color to blue */
 @media screen and (max-width: 992px) {
-  .search-box{
-    width: 83.7%;
-  }
-  .search-zone{
-    width: 96%;
-  }
   .zone{
-	width: 96%;
 	margin-bottom: 4px;
    }
 }
