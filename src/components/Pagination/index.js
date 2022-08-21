@@ -83,6 +83,7 @@ const Pagination = (props) => {
           <div className="arrow right" />
         </li>
       </ul>
+      
       <button
         title="Click here to see research results without pagination"
         className="button-get-all"
