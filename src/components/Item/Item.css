@@ -1,88 +1,77 @@
 .Item-Single{
-    width: 23.8%;
-    height: 10em;
-    text-align: left;
-    box-shadow: 0 5px 11px rgba(0,0,0,0.65);
-    padding: 5px;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: #282c34;
-    margin: 7px 7px 7px 0px;
-
-    z-index: 9;
-    transform: scale(1);
-		transition: 0.7s;
-		cursor: pointer;
+     width: 23.8%;
+     height: 10em;
+     text-align: left;
+     box-shadow: 0 5px 11px rgba(0,0,0,0.65);
+     padding: 5px;
+     border-radius: 5px;
+     background-color: #ffffff;
+     color: #282c34;
+     margin: 7px 7px 7px 0px;
+     z-index: 9;
+     transform: scale(1);
+     transition: 0.7s;
+     cursor: pointer;
 }
-
 .Item-Single a{
-    text-decoration: none;
+     text-decoration: none;
 }
-
 .Item-Single:hover{
-    z-index: 10000;
-    transform: scale(1.045);
-    box-shadow: 0 15px 23px rgba(0,0,0,0.7);
-    transition: 0.3s;
-    z-index: 0;
+     z-index: 10000;
+     transform: scale(1.045);
+     box-shadow: 0 15px 23px rgba(0,0,0,0.7);
+     transition: 0.3s;
+     z-index: 0;
 }
-
 .Item-Title{
-    font-size: 20px;
+     font-size: 20px;
 }
 .Item-Author{
-    color: rgba(190,190,190);
+     color: rgba(190,190,190);
 }
 .Item-Description{
-    margin-top: -0em;
-    font-size: 11px;
+     margin-top: -0em;
+     font-size: 11px;
 }
-
 .avatar{
-    width: 2em;
+     width: 2em;
 }
 .details{
-    width: 100%;
-    font-size: 10px;
-    float: right;
-    text-align: right;
-    margin-right: 0.7em;
-
+     width: 100%;
+     font-size: 10px;
+     float: right;
+     text-align: right;
+     margin-right: 0.7em;
 }
-
 @media screen and (max-width: 1700px) {
     .Item-Single{
-        width: 31.7%;
+         width: 31.7%;
     }
 }
-
-
 @media screen and (max-width: 1300px) {
     .Item-Single{
-        width: 48%;
+         width: 48%;
     }
 }
-
 /* On screens that are 992px or less, set the background color to blue */
 @media screen and (max-width: 992px) {
     .Item-Single{
-        width: 48%;
+         width: 48%;
     }
     .Item-Single:hover{
-        box-shadow: 0 15px 23px rgba(0,0,0,0.7);
-        transform: scale(1);
+         box-shadow: 0 15px 23px rgba(0,0,0,0.7);
+         transform: scale(1);
     }
 }
-
 @media screen and (max-width: 950px) {
     .Item-Single{
-        width: 48%;
+         width: 48%;
     }
 }
-
 /* On screens that are 600px or less, set the background color to olive */
 @media screen and (max-width: 800px) {
     .Item-Single{
-        width: 97%;
+         width: 97%;
     }
 }
+ 

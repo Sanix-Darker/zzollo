@@ -37,8 +37,6 @@ const Pagination = (props) => {
     onViewAll(totalCount);
   };
 
-  console.log(onViewAll)
-
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
     <div style={{ display: "bloc" }}>
