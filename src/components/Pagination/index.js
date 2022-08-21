@@ -1,9 +1,9 @@
-import React from 'react';
-import classnames from 'classnames';
-import { Paginate, DOTS } from './paginate';
-import './pagination.css';
+import React from "react";
+import classnames from "classnames";
+import { Paginate, DOTS } from "./paginate";
+import "./pagination.css";
 
-const Pagination = props => {
+const Pagination = (props) => {
   const {
     onPageChange,
     onViewAll,
@@ -11,14 +11,14 @@ const Pagination = props => {
     siblingCount = 1,
     currentPage,
     pageSize,
-    className
+    className,
   } = props;
 
   const paginationRange = Paginate({
     currentPage,
     totalCount,
     siblingCount,
-    pageSize
+    pageSize,
   });
 
   if (currentPage === 0 || paginationRange.length < 2) {
@@ -35,33 +35,38 @@ const Pagination = props => {
 
   const onDisplayAll = () => {
     onViewAll(totalCount);
-  }
+  };
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <div style={{"display":"bloc"}}>
+    <div style={{ display: "bloc" }}>
       <ul
-        className={classnames('pagination-container', { [className]: className })}
+        className={classnames("pagination-container", {
+          [className]: className,
+        })}
       >
         <li
-          className={classnames('pagination-item', {
-            disabled: currentPage === 1
+          className={classnames("pagination-item", {
+            disabled: currentPage === 1,
           })}
           onClick={onPrevious}
         >
           <div className="arrow left" />
         </li>
-        {paginationRange.map(pageNumber => {
-
+        {paginationRange.map((pageNumber) => {
           if (pageNumber === DOTS) {
-            return <li key={pageNumber} className="pagination-item dots">&#8230;</li>;
+            return (
+              <li key={pageNumber} className="pagination-item dots">
+                &#8230;
+              </li>
+            );
           }
 
           return (
             <li
               key={pageNumber}
-              className={classnames('pagination-item', {
-                selected: pageNumber === currentPage
+              className={classnames("pagination-item", {
+                selected: pageNumber === currentPage,
               })}
               onClick={() => onPageChange(pageNumber)}
             >
@@ -70,8 +75,8 @@ const Pagination = props => {
           );
         })}
         <li
-          className={classnames('pagination-item', {
-            disabled: currentPage === lastPage
+          className={classnames("pagination-item", {
+            disabled: currentPage === lastPage,
           })}
           onClick={onNext}
         >
@@ -79,10 +84,12 @@ const Pagination = props => {
         </li>
       </ul>
       <button
-        title='Click here to see research results without pagination'
-        className='button-get-all'
-        onClick={onDisplayAll}>Toggle Paggination</button>
-
+        title="Click here to see research results without pagination"
+        className="button-get-all"
+        onClick={onDisplayAll}
+      >
+        Toggle Paggination
+      </button>
     </div>
   );
 };

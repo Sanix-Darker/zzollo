@@ -1,110 +1,97 @@
 body{
-  background-color: #282c34;
+     background-color: #282c34;
 }
 .App-header {
-  height: 100vh;
-  flex-direction: column;
-  align-items: left;
-  justify-content: center;
-  color: white;
-  padding-left: 9%;
-  padding-right: 9%;
+     height: 100vh;
+     flex-direction: column;
+     align-items: left;
+     justify-content: center;
+     color: white;
+     padding-left: 9%;
+     padding-right: 9%;
 }
-
 .Author{
-  float: right;
+     float: right;
 }
-
 .Author img{
-  width: 2em;
-  margin-top: 1em;
-  margin-right: 0.75em;
-  border-radius: 100%;
+     width: 2em;
+     margin-top: 1em;
+     margin-right: 0.75em;
+     border-radius: 100%;
 }
-
 .App-link {
-  color: #61dafb;
+     color: #61dafb;
 }
-
 code{
-  font-size: 40px;
+     font-size: 40px;
 }
-
 small{
-  font-size: 12px;
-  font-style: italic;
+     font-size: 12px;
+     font-style: italic;
 }
-
 .head{
-  text-align: left;
+     text-align: left;
 }
-
 .search-zone{
-  z-index: 10;
-  width: 100%;
-  padding : 15px;
-  font-size: 20px;
-  box-shadow : 0 3px 5px rgba(0,0,0,0.35);
-  border: 0px;
-	margin-bottom: 20px;
+     z-index: 10;
+     width: 100%;
+     padding : 15px;
+     font-size: 20px;
+     box-shadow : 0 3px 5px rgba(0,0,0,0.35);
+     border: 0px;
+     margin-bottom: 20px;
 }
-
 .source-zone, .language-zone, .order-zone, .sort-zone{
-  width: 100%;
-  padding: 15px;
-  border: 0px;
-  background: white;
-  font-size: 20px;
-  box-shadow : 0 3px 5px rgba(0,0,0,0.35);
+     width: 100%;
+     padding: 15px;
+     border: 0px;
+     background: white;
+     font-size: 20px;
+     box-shadow : 0 3px 5px rgba(0,0,0,0.35);
 }
-
 .search-box{
-  z-index: 10;
-  background-color: #282c34;
-  width: 100%;
-  position: relative;
-  top: 0px;
+     z-index: 10;
+     background-color: #282c34;
+     width: 100%;
+     position: relative;
+     top: 0px;
 }
-
 /* On screens that are 992px or less, set the background color to blue */
 @media screen and (max-width: 992px) {
-  .zone{
-	margin-bottom: 4px;
-   }
+    .zone{
+         margin-bottom: 4px;
+    }
 }
-
 /* On screens that are 600px or less, set the background color to olive */
 @media screen and (max-width: 600px) {
-  small{
-    display: block;
-  }
-  .App-header {
-    padding-left: 1%;
-    padding-right: 1%;
-  }
-  .search-box{
-    width: 100%;
-  }
-  .search-zone,.language-zone, .order-zone, .sort-zone{
-    width: 96%;
-	}
-	.zone{
-		width: 100%;
-		margin-bottom: 5px;
-	}
+    small{
+         display: block;
+    }
+    .App-header {
+         padding-left: 1%;
+         padding-right: 1%;
+    }
+    .search-box{
+         width: 100%;
+    }
+    .search-zone,.language-zone, .order-zone, .sort-zone{
+         width: 96%;
+    }
+    .zone{
+         width: 100%;
+         margin-bottom: 5px;
+    }
 }
-
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+         animation: App-logo-spin infinite 20s linear;
+    }
 }
-
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+         transform: rotate(0deg);
+    }
+    to {
+         transform: rotate(360deg);
+    }
 }
