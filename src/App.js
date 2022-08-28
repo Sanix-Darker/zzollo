@@ -1,56 +1,45 @@
-import React, { Component } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import "./App.css";
 import "./components/utils/css/grid.css";
 import ItemList from "./components/ItemList";
 import LanguagesOption from "./components/utils/js/LanguagesOption";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      search: "",
-      source: "all",
-      language: "all",
-      sort: "all",
-      order: "all",
-      go_search: false,
-      collapseFilters: false, // Add state to handle show/hide filters
-    };
-    this.refText = React.createRef();
+function App () {
+
+    const [search, setSearch] = useState('')
+    const [source , setSource] = useState('all')
+    const [language, setLanguage] = useState('all')
+    const [sort , setSort] = useState('all')
+    const [order , setOrder] = useState('all')
+    const [go_search, setGoSearch] = useState(false)
+    const [collapseFilters , setCollapseFilters] = useState(false)
+    const refText = useRef()
+
+  function handle_change(event) {
+    if (event.key === "Enter") setGoSearch(true);
+    else setGoSearch(false);
+    setSearch(event.target.value);
   }
 
-  handle_change(event) {
-    if (event.key === "Enter") this.setState({ go_search: true });
-    else this.setState({ go_search: false });
-    this.setState({ search: event.target.value });
-
-    this.setState({ search: event.target.value });
-  }
-
-  handle_change_option(event, type) {
+  function handle_change_option(event, type) {
     if (["source", "language", "sort", "order"].indexOf(type) !== -1) {
-      let toUpdate = { go_search: true };
+      let toUpdate = { go_search: true }
       toUpdate[type] = event.target.value !== "" ? event.target.value : "all";
-      this.setState(toUpdate);
+      if(type==="source") setSource(toUpdate[type])
+      else if(type==="language") setLanguage(toUpdate[type])
+      else if(type==="sort") setSort(toUpdate[type])
+      else setOrder(toUpdate[type])
+      setGoSearch(true)
     }
   }
 
-  go_search_change() {
-    this.setState({
-      go_search: !this.state.go_search,
-    });
-  }
-
   // handle hide/show filters on Click
-  handleClick() {
-    this.setState((prevState) => ({
-      ...prevState,
-      collapseFilters: !prevState.collapseFilters,
-    }));
+  function handleClick() {
+    setCollapseFilters((state) => !state)
   }
 
   // get query parameter
-  getQueryStringValue(key) {
+  function getQueryStringValue(key) {
     return decodeURIComponent(
       window.location.search.replace(
         new RegExp(
@@ -64,20 +53,16 @@ class App extends Component {
     );
   }
 
-  componentDidMount() {
-    const searchText = this.getQueryStringValue("q");
-
+  useEffect(() => {
+    const searchText = getQueryStringValue("q");
     if (searchText !== "") {
-      this.setState({
-        search: searchText,
-        go_search: true,
-      });
+      setSearch(searchText)
+      setGoSearch(true)
     }
-    this.refText.current.focus();
-  }
+    refText.current.focus();
+  }, [])
 
-  render() {
-    const linkStyleNone = { color: "white", textDecoration: "none" };
+  const linkStyleNone = { color: "white", textDecoration: "none" }
     return (
       <div className="App">
         <header className="App-header">
@@ -104,22 +89,22 @@ class App extends Component {
               <div className="col-md-12">
                 <input
                   type="text"
-                  ref={this.refText}
-                  value={this.state.search}
+                  ref={refText}
+                  value={search}
                   className="search-zone"
                   onKeyUp={(event) => {
-                    if (event.keyCode === 13)
-                      window.document.location.href = "?q=" + this.state.search;
-                    this.handle_change(event);
+                    if (event.key === 13)
+                      window.document.location.href = "?q=" + search;
+                    handle_change(event);
                   }}
-                  onChange={(event) => this.handle_change(event)}
-                  onClick={() => this.handleClick()} // handle hide/show filters on Click
+                  onChange={(event) => handle_change(event)}
+                  onClick={() => handleClick()} // handle hide/show filters on Click
                   title="Click on the text box to show/hide others filters."
                   placeholder="Search keyword(s) for open-source project(s)..."
                 />
               </div>
             </div>
-            {this.state.collapseFilters && (
+            {collapseFilters && (
               <div className="row">
                 <div className="col-md-3 zone">
                   <input
@@ -127,7 +112,7 @@ class App extends Component {
                     placeholder="From [Github / GitLab / Bitbucket]"
                     className="source-zone"
                     onKeyUp={(event) =>
-                      this.handle_change_option(event, "source")
+                    handle_change_option(event, "source")
                     }
                   />
                   <datalist id="source">
@@ -145,7 +130,7 @@ class App extends Component {
                     className="language-zone"
                     placeholder="Filter by languages"
                     onKeyUp={(event) =>
-                      this.handle_change_option(event, "language")
+                      handle_change_option(event, "language")
                     }
                   />
                   <datalist id="languages">
@@ -159,7 +144,7 @@ class App extends Component {
                     className="sort-zone"
                     placeholder="Filter By (Stars / Issues / fork)"
                     onKeyUp={(event) =>
-                      this.handle_change_option(event, "sort")
+                      handle_change_option(event, "sort")
                     }
                   />
                   <datalist id="sort">
@@ -178,12 +163,12 @@ class App extends Component {
                     placeholder="Filter by (Acsending/Descending))"
                     defaultValue=""
                     onKeyUp={(event) =>
-                      this.handle_change_option(event, "order")
+                      handle_change_option(event, "order")
                     }
                   />
                   <datalist id="order">
                     <option value="all">
-                      Filter by (Acsending/Descending))
+                      Filter by (Acsending/Descending)
                     </option>
                     <option value="asc">Ascending order</option>
                     <option value="desc">Descending order</option>
@@ -193,17 +178,16 @@ class App extends Component {
             )}
           </div>
           <ItemList
-            search={this.state.search}
-            source={this.state.source}
-            language={this.state.language}
-            sort={this.state.sort}
-            order={this.state.order}
-            go_search={this.state.go_search}
+            search={search}
+            source={source}
+            language={language}
+            sort={sort}
+            order={order}
+            go_search={go_search}
           />
         </header>
       </div>
     );
-  }
 }
 
 export default App;
