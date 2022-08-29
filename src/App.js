@@ -15,7 +15,7 @@ function App () {
     const [collapseFilters , setCollapseFilters] = useState(false)
     const refText = useRef()
 
-  function handle_change(event) {
+  const handle_change = (event) => {
     if (event.key === "Enter") setGoSearch(true);
     else setGoSearch(false);
     setSearch(event.target.value);
