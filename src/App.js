@@ -34,7 +34,7 @@ function App () {
   }
 
   // handle hide/show filters on Click
-  function handleClick() {
+  const handleClick = () => {
     setCollapseFilters((state) => !state)
   }
 
