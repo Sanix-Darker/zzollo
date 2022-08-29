@@ -290,6 +290,27 @@ class ItemList extends Component {
               <div style={{ width: "100%", textAlign: "center" }}>
                 <br />
                 <span> Found {this.state.count} results. </span>
+                <button
+                  onClick={() => {
+                    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "block",
+                    zIndex: 20,
+                    position: "fixed",
+                    padding: "1rem 1.2rem",
+                    border: "none",
+                    fontSize: "11px",
+                    bottom: "40px",
+                    right: "40px",
+                    backgroundColor: "grey",
+                    color: "#fff",
+                    textAlign: "center",
+                  }}
+                >
+                  Scroll to top
+                </button>
               </div>
             ) : null}
             <br />
