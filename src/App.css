@@ -74,8 +74,8 @@ small{
     .search-box{
          width: 100%;
     }
-    .search-zone,.language-zone, .order-zone, .sort-zone{
-         width: 96%;
+    .source-zone,.search-zone,.language-zone, .order-zone, .sort-zone{
+         width: 98%;
     }
     .zone{
          width: 100%;
