@@ -21,7 +21,7 @@ function App () {
     setSearch(event.target.value);
   }
 
-  function handle_change_option(event, type) {
+  const handle_change_option = (event, type) => {
     if (["source", "language", "sort", "order"].indexOf(type) !== -1) {
       let toUpdate = { go_search: true }
       toUpdate[type] = event.target.value !== "" ? event.target.value : "all";
