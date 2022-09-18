@@ -1,25 +1,21 @@
-import React, { Component } from "react";
+import React,  { useEffect, useState } from "react";
 import "./ItemList.css";
 import Item from "../Item";
 import Pagination from "../Pagination";
 import { linkSelector } from "../utils/js/Selectors";
 
-class ItemList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      precedentSearch: "",
-      links: linkSelector,
-      items: [],
-      itemsOrig: [],
-      load: true,
-      count: 0,
-      pageSize: 12,
-      currentPage: 1,
-    };
-  }
+function ItemList (props) {
 
-  pushNewItems(items, source, resData, source_object) {
+    const [precedentSearch, setPrecedentSearch] = useState("")
+    const [links, setLinks] = useState(linkSelector)
+    const [items , setItems] = useState([])
+    const [itemOrig, setItemsOrig]=useState([])
+    const [load, setLoad] = useState(true)
+    const [count, setCount] = useState(0)
+    const [pageSize, setPageSize] = useState(12)
+    const [currentPage, setCurrentPage] = useState(1)
+
+  const pushNewItems = (items, source, resData, source_object) => {
     resData &&
       resData.map((elt, index) => {
         const author = source_object["author"].split("|");
@@ -69,18 +65,16 @@ class ItemList extends Component {
       });
     // perform a sort
     items.sort((a, b) => a.stars - b.stars).reverse();
-    this.setState({
-      load: false,
-      items: items,
-      itemsOrig: items,
-      count: items.length,
-    });
+    setLoad(false);
+    setItems(items);
+    setItemsOrig(items);
+    setCount(items.length)
     return items;
   }
 
-  getresults(items, source, search, page) {
+  const getresults = (items, source, search, page) => {
     return new Promise((resolve, reject) => {
-      const linkToFetch = this.state.links[source]["link"] + search;
+      const linkToFetch = links[source]["link"] + search;
 
       fetch(
         source === "github" || source === "gitlab"
@@ -89,9 +83,9 @@ class ItemList extends Component {
       )
         .then(async (response) => {
           const resData = await response.json();
-          const source_object = this.state.links[source];
+          const source_object = links[source];
 
-          items = this.pushNewItems(
+          items = pushNewItems(
             items,
             source,
             source === "github"
@@ -104,20 +98,20 @@ class ItemList extends Component {
           resolve(items);
         })
         .catch((error) => {
-          this.setState({ errorMessage: error.toString() });
+          // this.setState({ errorMessage: error.toString() });
           console.error("There was an error!", error);
         });
     });
   }
 
-  fetch_projects = (search) => {
+  const fetch_projects = (search) => {
     search = search.toLowerCase();
     let items = [];
 
-    this.getresults(items, "github", search, 1).then((returned_items) => {
-      this.getresults(returned_items, "gitlab", search, 1).then(
+    getresults(items, "github", search, 1).then((returned_items) => {
+      getresults(returned_items, "gitlab", search, 1).then(
         (returned_items2) => {
-          this.getresults(returned_items2, "bitbucket", search, 1).then(
+          getresults(returned_items2, "bitbucket", search, 1).then(
             (res) => {
               console.log("[+] Fetches ended !");
             }
@@ -127,93 +121,86 @@ class ItemList extends Component {
     });
   };
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.go_search === true) {
-      if (nextProps.search !== this.state.precedentSearch) {
-        this.setState({
-          precedentSearch: nextProps.search,
-          items: [],
-          itemsOrig: [],
-          load: true,
-        });
-        this.fetch_projects(nextProps.search);
+  useEffect(()=> {
+    if (props.go_search === true) {
+      if (props.search !== precedentSearch) {
+        setPrecedentSearch(props.search);
+        setItems([]);
+        setItemsOrig([]);
+        setLoad(true);
+        fetch_projects(props.search);
       }
+    }
+     // eslint-disable-next-line
+  },[props.go_search])
+  
+  useEffect(()=> {
+    if (props.source !== "all") {
+      const filterItems = itemOrig.filter((elt) => {
+        return elt["source"] !== null
+          ? elt["source"].toLowerCase() === props.source.toLowerCase()
+          : null;
+      })
+      setItems(filterItems)
+    } else {
+      setItems(itemOrig)
+    }
+     // eslint-disable-next-line
+  },[props.source])
 
-      if (nextProps.source !== "all") {
-        this.setState({
-          items: this.state.itemsOrig.filter((elt) => {
-            return elt["source"] !== null
-              ? elt["source"].toLowerCase() === nextProps.source.toLowerCase()
-              : null;
-          }),
-        });
-      } else {
-        this.setState({
-          items: this.state.itemsOrig,
-        });
-      }
+  useEffect(()=> {
+    if (props.language !== "all") {
+      const filterItems = itemOrig.filter((elt) => {
+        return elt["language"] !== null
+          ? elt["language"].toLowerCase() ===
+          props.language.toLowerCase()
+          : null;
+      })
+      setItems(filterItems)
+    }
+     // eslint-disable-next-line
+  },[props.language])
 
-      if (nextProps.language !== "all") {
-        this.setState({
-          items: this.state.itemsOrig.filter((elt) => {
-            return elt["language"] !== null
-              ? elt["language"].toLowerCase() ===
-                  nextProps.language.toLowerCase()
-              : null;
-          }),
-        });
-      }
-
-      if (nextProps.sort !== "all") {
-        if (nextProps.sort === "star") {
-          if (nextProps.order === "desc") {
-            this.setState({
-              items: this.state.itemsOrig
-                .sort((a, b) => a.stars - b.stars)
-                .reverse(),
-            });
-          } else {
-            this.setState({
-              items: this.state.itemsOrig.sort((a, b) => a.stars - b.stars),
-            });
-          }
-        } else if (nextProps.sort === "fork") {
-          if (nextProps.order === "desc") {
-            this.setState({
-              items: this.state.itemsOrig
-                .sort((a, b) => a.forks - b.forks)
-                .reverse(),
-            });
-          } else {
-            this.setState({
-              items: this.state.itemsOrig.sort((a, b) => a.forks - b.forks),
-            });
-          }
-        } else if (nextProps.sort === "issue") {
-          if (nextProps.order === "desc") {
-            this.setState({
-              items: this.state.itemsOrig
-                .sort((a, b) => a.issues - b.issues)
-                .reverse(),
-            });
-          } else {
-            this.setState({
-              items: this.state.itemsOrig.sort((a, b) => a.issues - b.issues),
-            });
-          }
+  useEffect(() => {
+    if (props.sort !== "all") {
+      if (props.sort === "star") {
+        if (props.order === "desc") {
+          const filterItems = itemOrig.sort((a, b) => a.stars - b.stars).reverse()
+          setItems(filterItems)
+        } else {
+          const filterItems = itemOrig.sort((a, b) => a.stars - b.stars)
+          setItems(filterItems)
+        }
+      } else if (props.sort === "fork") {
+        if (props.order === "desc") {
+          const filterItems = itemOrig.sort((a, b) => a.forks - b.forks).reverse()
+          setItems(filterItems)
+        } else {
+            const filterItems = itemOrig.sort((a, b) => a.forks - b.forks)
+            setItems(filterItems)
+        }
+      } else if (props.sort === "issue") {
+        if (props.order === "desc") {
+          const filterItems = itemOrig.sort((a, b) => a.issues - b.issues).reverse()
+          setItems(filterItems)
+        } else {
+          const filterItems = itemOrig.sort((a, b) => a.issues - b.issues)
+          setItems(filterItems)
         }
       }
     }
-  };
+     // eslint-disable-next-line
+  },[props.sort, props.order])
 
-  componentDidMount() {
-    this.setState({ items: [] });
-    if (this.props.search !== "" && this.props.go_search === true) {
-      this.fetch_projects(this.props.search);
+  useEffect(()=> {
+    setItems([]);
+    if(props.search !== "" && props.go_search === true){
+      fetch_projects(props.search)
     }
-  }
+     // eslint-disable-next-line
+  },[props.search])
 
-  filterItemsByLanguage(items, { language: selectedLanguage }) {
+  const filterItemsByLanguage = (items, { language: selectedLanguage }) => {
     if (selectedLanguage === "all") {
       return items;
     }
@@ -224,18 +211,15 @@ class ItemList extends Component {
     });
   }
 
-  getItemsByPage(items) {
-    const firstPageIndex = (this.state.currentPage - 1) * this.state.pageSize;
-    const lastPageIndex = firstPageIndex + this.state.pageSize;
+  const getItemsByPage = (items) => {
+    const firstPageIndex = (currentPage - 1) * pageSize;
+    const lastPageIndex = firstPageIndex + pageSize;
     return items.slice(firstPageIndex, lastPageIndex);
   }
 
-  getItemsComponents() {
-    const itemsFilter = this.filterItemsByLanguage(
-      this.state.items,
-      this.props
-    );
-    const items = this.getItemsByPage(itemsFilter);
+  const getItemsComponents = (itemsTodisplay) => {
+    const itemsFilter = filterItemsByLanguage(itemsTodisplay,props);
+    const finalItem = getItemsByPage(itemsFilter);
     return (
       <div>
         <div
@@ -245,8 +229,8 @@ class ItemList extends Component {
             justifyContent: "space-around",
           }}
         >
-          {items.length > 0 ? (
-            items.map((elt, index) => {
+          {finalItem && finalItem.length > 0 ? (
+            finalItem.map((elt, index) => {
               return (
                 <Item
                   key={index}
@@ -271,25 +255,23 @@ class ItemList extends Component {
         </div>
         <Pagination
           className="pagination-bar"
-          currentPage={this.state.currentPage}
-          totalCount={this.state.items.length}
-          pageSize={this.state.pageSize}
+          currentPage={currentPage}
+          totalCount={items.length}
+          pageSize={pageSize}
           onPageChange={(page) => this.setState({ currentPage: page })}
           onViewAll={(itemCount) => this.setState({ pageSize: itemCount })}
         />
       </div>
     );
   }
-
-  render() {
     return (
       <div>
         <center>
           <div className="Item-List">
-            {this.state.count > 0 ? (
+            {count > 0 ? (
               <div style={{ width: "100%", textAlign: "center" }}>
                 <br />
-                <span> Found {this.state.count} results. </span>
+                <span> Found {count} results. </span>
                 <button
                   onClick={() => {
                     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -314,8 +296,8 @@ class ItemList extends Component {
               </div>
             ) : null}
             <br />
-            {(this.props.search === "" || this.props.go_search === false) &&
-            this.state.load ? (
+            {(props.search === "" || props.go_search === false) &&
+            load ? (
               <div>
                 <br />
                 <img src="/imgs/cat.gif" alt="" />
@@ -329,7 +311,7 @@ class ItemList extends Component {
                   ></path>
                 </svg>
               </div>
-            ) : this.state.load ? (
+            ) : load ? (
               <div>
                 {" "}
                 <br />
@@ -345,13 +327,12 @@ class ItemList extends Component {
                 />
               </div>
             ) : (
-              this.getItemsComponents()
+              getItemsComponents(items)
             )}
           </div>
         </center>
       </div>
     );
-  }
 }
 
 export default ItemList;
