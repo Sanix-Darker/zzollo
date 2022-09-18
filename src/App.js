@@ -1,4 +1,4 @@
-import React, { useState,useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./components/utils/css/grid.css";
 import ItemList from "./components/ItemList";
@@ -15,13 +15,13 @@ function App () {
     const [collapseFilters , setCollapseFilters] = useState(false)
     const refText = useRef()
 
-  function handle_change(event) {
+  const handle_change = (event) => {
     if (event.key === "Enter") setGoSearch(true);
     else setGoSearch(false);
     setSearch(event.target.value);
   }
 
-  function handle_change_option(event, type) {
+  const handle_change_option = (event, type) => {
     if (["source", "language", "sort", "order"].indexOf(type) !== -1) {
       let toUpdate = { go_search: true }
       toUpdate[type] = event.target.value !== "" ? event.target.value : "all";
@@ -34,12 +34,12 @@ function App () {
   }
 
   // handle hide/show filters on Click
-  function handleClick() {
+  const handleClick = () => {
     setCollapseFilters((state) => !state)
   }
 
   // get query parameter
-  function getQueryStringValue(key) {
+  const getQueryStringValue = (key) => {
     return decodeURIComponent(
       window.location.search.replace(
         new RegExp(
