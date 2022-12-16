@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # yarn
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+    commit-message:
+      prefix: "yarn deps"
+      include: "scope"
+
