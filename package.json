@@ -4,9 +4,6 @@
   "private": true,
   "author": "sanix-darker",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.1.2",
-    "@testing-library/user-event": "^14.5.2",
     "classnames": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -20,6 +17,11 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "devDependencies":{
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.2"
   },
   "browserslist": {
     "production": [
