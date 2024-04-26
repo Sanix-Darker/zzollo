@@ -46,7 +46,7 @@ yarn start
 # Using npm
 npm start
 
-# Using zolo.sh
+# Using zolo.sh(this will install all deps, then build and serve)
 ./zolo.sh
 ```
 
