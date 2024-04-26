@@ -193,7 +193,6 @@ function ItemList (props) {
   },[props.sort, props.order])
 
   useEffect(()=> {
-    console.log("Search useEffect for search = %s", props.search);
     setItems([]);
     if(props.search !== "" && props.go_search === true){
       fetch_projects(props.search)
@@ -219,9 +218,9 @@ function ItemList (props) {
   }
 
   const getItemsComponents = (itemsTodisplay) => {
-    if(itemsTodisplay == null){
+    /*if(itemsTodisplay == null){
       setCount(itemsTodisplay.length);
-    }
+    }*/
     const itemsFilter = filterItemsByLanguage(itemsTodisplay,props);
     const finalItem = getItemsByPage(itemsFilter);
     return (
