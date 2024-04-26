@@ -218,9 +218,6 @@ function ItemList (props) {
   }
 
   const getItemsComponents = (itemsTodisplay) => {
-    /*if(itemsTodisplay == null){
-      setCount(itemsTodisplay.length);
-    }*/
     const itemsFilter = filterItemsByLanguage(itemsTodisplay,props);
     const finalItem = getItemsByPage(itemsFilter);
     return (
