@@ -228,7 +228,16 @@ function ItemList (props) {
             flexWrap: "wrap",
             justifyContent: "space-around",
           }}
+          
         >
+          {
+            items.length > 0 ? (
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <span> Found {count} results. </span>
+              </div>
+            ) : null
+          }
+          
           {finalItem && finalItem.length > 0 ? (
             finalItem.map((elt, index) => {
               return (
@@ -269,9 +278,9 @@ function ItemList (props) {
         <center>
           <div className="Item-List">
             {count > 0 ? (
+              
               <div style={{ width: "100%", textAlign: "center" }}>
                 <br />
-                <span> Found {count} results. </span>
                 <button
                   onClick={() => {
                     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
