@@ -267,8 +267,8 @@ function ItemList (props) {
           currentPage={currentPage}
           totalCount={items.length}
           pageSize={pageSize}
-          onPageChange={(page) => this.setState({ currentPage: page })}
-          onViewAll={(itemCount) => this.setState({ pageSize: itemCount })}
+          onPageChange={(page) => setCurrentPage(page)}
+          onViewAll={(itemCount) => setPageSize(itemCount)}
         />
       </div>
     );
