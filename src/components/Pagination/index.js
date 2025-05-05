@@ -1,19 +1,22 @@
-import React from "react";
-import classnames from "classnames";
+import React, { useCallback } from "react";
+import classNames from "classnames";
 import { Paginate, DOTS } from "./paginate";
 import "./pagination.css";
 
-const Pagination = (props) => {
-  const {
-    onPageChange,
-    onViewAll,
-    totalCount,
-    siblingCount = 1,
-    currentPage,
-    pageSize,
-    className,
-  } = props;
-
+/**
+ * Hook‑safe, accessible pagination component
+ */
+const Pagination = React.memo(function Pagination({
+  onPageChange,
+  onViewAll,
+  totalCount,
+  siblingCount = 1,
+  currentPage,
+  pageSize,
+  className,
+  showViewAll = true,
+}) {
+  /* ---------------------- derive range --------------------- */
   const paginationRange = Paginate({
     currentPage,
     totalCount,
@@ -21,77 +24,81 @@ const Pagination = (props) => {
     pageSize,
   });
 
-  if (currentPage === 0 || paginationRange.length < 2) {
-    return null;
-  }
+  const lastPage = paginationRange[paginationRange.length - 1];
 
-  const onNext = () => {
-    onPageChange(currentPage + 1);
-  };
+  // early‑display check (hooks must come first!)
+  const hidePagination = currentPage === 0 || paginationRange.length < 2;
 
-  const onPrevious = () => {
-    onPageChange(currentPage - 1);
-  };
+  /* ---------------------- callbacks ------------------------ */
+  const handlePrev = useCallback(() => {
+    if (currentPage > 1) onPageChange(currentPage - 1);
+  }, [currentPage, onPageChange]);
 
-  const onDisplayAll = () => {
-    onViewAll(totalCount);
-  };
+  const handleNext = useCallback(() => {
+    if (currentPage < lastPage) onPageChange(currentPage + 1);
+  }, [currentPage, lastPage, onPageChange]);
 
-  let lastPage = paginationRange[paginationRange.length - 1];
+  const handleViewAll = useCallback(
+    () => onViewAll(totalCount),
+    [onViewAll, totalCount]
+  );
+
+  /* ---------------------- early exit ----------------------- */
+  if (hidePagination) return null;
+
+  /* ---------------------- render --------------------------- */
   return (
-    <div style={{ display: "bloc" }}>
-      <ul
-        className={classnames("pagination-container", {
-          [className]: className,
-        })}
-      >
+    <div>
+      <ul className={classNames("pagination-container", className)}>
+        {/* prev */}
         <li
-          className={classnames("pagination-item", {
-            disabled: currentPage === 1,
-          })}
-          onClick={onPrevious}
+          className={classNames("pagination-item", { disabled: currentPage === 1 })}
+          onClick={handlePrev}
         >
-          <div className="arrow left" />
+          <span className="arrow left" />
         </li>
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === DOTS) {
-            return (
-              <li key={pageNumber + '' + index} className="pagination-item dots">
-                &#8230;
-              </li>
-            );
-          }
 
-          return (
+        {/* pages */}
+        {paginationRange.map((pageNumber, idx) =>
+          pageNumber === DOTS ? (
+            <li key={`dots-${idx}`} className="pagination-item dots">
+              &#8230;
+            </li>
+          ) : (
             <li
               key={pageNumber}
-              className={classnames("pagination-item", {
+              className={classNames("pagination-item", {
                 selected: pageNumber === currentPage,
               })}
               onClick={() => onPageChange(pageNumber)}
             >
               {pageNumber}
             </li>
-          );
-        })}
+          )
+        )}
+
+        {/* next */}
         <li
-          className={classnames("pagination-item", {
-            disabled: currentPage === lastPage,
-          })}
-          onClick={onNext}
+          className={classNames("pagination-item", { disabled: currentPage === lastPage })}
+          onClick={handleNext}
         >
-          <div className="arrow right" />
+          <span className="arrow right" />
         </li>
       </ul>
-      <button
-        title="Click here to see research results without pagination"
-        className="button-get-all"
-        onClick={onDisplayAll}
-      >
-        Toggle Paggination
-      </button>
+
+      {/* view all */}
+      {showViewAll && (
+        <button
+          type="button"
+          title="Show all results on one page (may affect performance)"
+          className="button-get-all"
+          onClick={handleViewAll}
+        >
+          Toggle pagination
+        </button>
+      )}
     </div>
   );
-};
+});
 
 export default Pagination;
