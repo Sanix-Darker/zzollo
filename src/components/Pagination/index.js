@@ -1,10 +1,14 @@
-import React from "react";
-import classnames from "classnames";
+import React, { useMemo, useCallback } from "react";
+import classNames from "classnames";
 import { Paginate, DOTS } from "./paginate";
 import "./pagination.css";
 
-const Pagination = (props) => {
-  const {
+/**
+ * Pagination component (memo‑ised)
+ * @param {Object} props
+ */
+const Pagination = React.memo(
+  ({
     onPageChange,
     onViewAll,
     totalCount,
@@ -12,86 +16,90 @@ const Pagination = (props) => {
     currentPage,
     pageSize,
     className,
-  } = props;
+    showViewAll = true,
+  }) => {
+    /* ---------------------- derived data ---------------------- */
+    const paginationRange = useMemo(
+      () =>
+        Paginate({
+          currentPage,
+          totalCount,
+          siblingCount,
+          pageSize,
+        }),
+      [currentPage, totalCount, siblingCount, pageSize]
+    );
 
-  const paginationRange = Paginate({
-    currentPage,
-    totalCount,
-    siblingCount,
-    pageSize,
-  });
+    const lastPage = useMemo(
+      () => paginationRange[paginationRange.length - 1],
+      [paginationRange]
+    );
 
-  if (currentPage === 0 || paginationRange.length < 2) {
-    return null;
-  }
+    /* ---------------------- early exit ----------------------- */
+    if (currentPage === 0 || paginationRange.length < 2) return null;
 
-  const onNext = () => {
-    onPageChange(currentPage + 1);
-  };
+    /* ---------------------- handlers ------------------------- */
+    const handlePrev = useCallback(() => {
+      if (currentPage > 1) onPageChange(currentPage - 1);
+    }, [currentPage, onPageChange]);
 
-  const onPrevious = () => {
-    onPageChange(currentPage - 1);
-  };
+    const handleNext = useCallback(() => {
+      if (currentPage < lastPage) onPageChange(currentPage + 1);
+    }, [currentPage, lastPage, onPageChange]);
 
-  const onDisplayAll = () => {
-    onViewAll(totalCount);
-  };
+    const handleViewAll = useCallback(() => onViewAll(totalCount), [onViewAll, totalCount]);
 
-  let lastPage = paginationRange[paginationRange.length - 1];
-  return (
-    <div style={{ display: "bloc" }}>
-      <ul
-        className={classnames("pagination-container", {
-          [className]: className,
-        })}
-      >
-        <li
-          className={classnames("pagination-item", {
-            disabled: currentPage === 1,
-          })}
-          onClick={onPrevious}
-        >
-          <div className="arrow left" />
-        </li>
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === DOTS) {
-            return (
-              <li key={pageNumber + '' + index} className="pagination-item dots">
+    /* ---------------------- render --------------------------- */
+    return (
+      <div>
+        <ul className={classNames("pagination-container", className)}>
+          <li
+            className={classNames("pagination-item", { disabled: currentPage === 1 })}
+            aria-disabled={currentPage === 1}
+            onClick={handlePrev}
+          >
+            <span className="arrow left" />
+          </li>
+
+          {paginationRange.map((pageNumber, idx) =>
+            pageNumber === DOTS ? (
+              <li key={`dots-${idx}`} className="pagination-item dots">
                 &#8230;
               </li>
-            );
-          }
+            ) : (
+              <li
+                key={pageNumber}
+                className={classNames("pagination-item", { selected: pageNumber === currentPage })}
+                aria-current={pageNumber === currentPage ? "page" : undefined}
+                onClick={() => onPageChange(pageNumber)}
+              >
+                {pageNumber}
+              </li>
+            )
+          )}
 
-          return (
-            <li
-              key={pageNumber}
-              className={classnames("pagination-item", {
-                selected: pageNumber === currentPage,
-              })}
-              onClick={() => onPageChange(pageNumber)}
-            >
-              {pageNumber}
-            </li>
-          );
-        })}
-        <li
-          className={classnames("pagination-item", {
-            disabled: currentPage === lastPage,
-          })}
-          onClick={onNext}
-        >
-          <div className="arrow right" />
-        </li>
-      </ul>
-      <button
-        title="Click here to see research results without pagination"
-        className="button-get-all"
-        onClick={onDisplayAll}
-      >
-        Toggle Paggination
-      </button>
-    </div>
-  );
-};
+          <li
+            className={classNames("pagination-item", { disabled: currentPage === lastPage })}
+            aria-disabled={currentPage === lastPage}
+            onClick={handleNext}
+          >
+            <span className="arrow right" />
+          </li>
+        </ul>
+
+        {showViewAll && (
+          <button
+            type="button"
+            title="Show all results on one page (may affect performance)"
+            className="button-get-all"
+            onClick={handleViewAll}
+          >
+            Toggle pagination
+          </button>
+        )}
+      </div>
+    );
+  }
+);
 
 export default Pagination;
