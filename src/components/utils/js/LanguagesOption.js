@@ -1,4 +1,3 @@
-import React from "react";
 const langs = `ActionScript
 C
 C#
@@ -346,10 +345,14 @@ Zephir
 Zimpl
 Zig`;
 
-let LanguagesOption = langs.split("\n").map((lang, i) => (
-  <option key={i} value={lang}>
-    {lang}
-  </option>
+let LanguagesOption = langs
+.split(/\r?\n/)
+.filter(lang => lang.trim() !== '')
+.map(lang => (
+    {
+        value : lang,
+        label : lang,
+    }
 ));
 
 export default LanguagesOption;

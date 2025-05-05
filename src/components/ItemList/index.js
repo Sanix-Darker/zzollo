@@ -90,10 +90,9 @@ export default function ItemList({
   /* -------------------- fetch logic -------------------- */
   const buildItems = useCallback((src, data) => {
     const map = linkSelector[src];
-    const arr =
-      src === "github" ? data.items : src === "bitbucket" ? data.values : data;
+    const arr = (src === "github") ? data.items : src === "bitbucket" ? data.values : data;
     const parser = src === "gitlab" ? parseGitlabItem : parseGitItem;
-    return arr.map((elt, idx) => ({
+    return arr?.map((elt, idx) => ({
       index: idx,
       source: src,
       ...parser(elt, map),
@@ -156,7 +155,7 @@ export default function ItemList({
 
     if (selectedLanguage !== "all") {
       tmp = tmp.filter(
-        (i) => i.language?.toLowerCase() === selectedLanguage.toLowerCase()
+        (i) => i?.language?.toLowerCase() === selectedLanguage.toLowerCase()
       );
     }
 
@@ -198,7 +197,7 @@ export default function ItemList({
     }
 
     return pageItems.map((elt, idx) => (
-      <Item key={`${elt.source}-${idx}`} {...elt} />
+      elt && <Item key={`${elt.source}-${idx}`} {...elt} />
     ));
   };
 

@@ -151,6 +151,7 @@ export default function App() {
             <div className="row">
               <FilterColumn
                 id="source"
+                className="source-zone"
                 placeholder="From [Github / GitLab / Bitbucket]"
                 onChange={(e) => handleFilter(e, "source")}
                 options={[
@@ -163,13 +164,15 @@ export default function App() {
 
               <FilterColumn
                 id="languages"
+                className="language-zone"
                 placeholder="Filter by languages"
                 onChange={(e) => handleFilter(e, "language")}
-                customOptions={<LanguagesOption />}
+                options={LanguagesOption}
               />
 
               <FilterColumn
                 id="sort"
+                className="sort-zone"
                 placeholder="Filter By (Stars / Issues / Forks)"
                 onChange={(e) => handleFilter(e, "sort")}
                 options={[
@@ -182,6 +185,7 @@ export default function App() {
 
               <FilterColumn
                 id="order"
+                className="order-zone"
                 placeholder="Order (Ascending/Descending)"
                 onChange={(e) => handleFilter(e, "order")}
                 options={[
@@ -210,11 +214,11 @@ export default function App() {
 
 // ---------------------- FilterColumn ----------------------
 const FilterColumn = React.memo(
-  ({ id, placeholder, onChange, options = [], customOptions = null }) => (
+  ({ id, placeholder, className, onChange, options = [], customOptions = null }) => (
     <div className="col-md-3 zone">
       <input
         list={id}
-        className={`${id}-zone`}
+        className={className}
         placeholder={placeholder}
         onChange={onChange}
       />

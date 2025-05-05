@@ -4,7 +4,7 @@ import "./Item.css";
 /* ------------------------------------------------------------------
  *  helpers
  * ----------------------------------------------------------------*/
-const truncate = (str = "", len) => (str.length > len ? `${str.slice(0, len)}…` : str);
+const truncate = (str = "", len) => str && (str.length > len ? `${str?.slice(0, len)}…` : str);
 const safeNum = (n) => (Number.isFinite(n) ? n : 0);
 
 const GitHubIcon = (
