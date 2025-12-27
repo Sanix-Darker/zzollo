@@ -1,77 +1,110 @@
-.Item-Single{
-     width: 23.8%;
-     height: 10em;
-     text-align: left;
-     box-shadow: 0 5px 11px rgba(0,0,0,0.65);
-     padding: 5px;
-     border-radius: 5px;
-     background-color: #ffffff;
-     color: #282c34;
-     margin: 7px 7px 7px 0px;
-     z-index: 9;
-     transform: scale(1);
-     transition: 0.7s;
-     cursor: pointer;
+.item {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s ease;
+  min-height: 160px;
 }
-.Item-Single a{
-     text-decoration: none;
+
+.item:hover {
+  border-color: var(--text-muted);
+  transform: translateY(-2px);
 }
-.Item-Single:hover{
-     z-index: 10000;
-     transform: scale(1.045);
-     box-shadow: 0 15px 23px rgba(0,0,0,0.7);
-     transition: 0.3s;
-     z-index: 0;
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
-.Item-Title{
-     font-size: 20px;
+
+.item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
 }
-.Item-Author{
-     color: rgba(190,190,190);
+
+.source-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.6;
 }
-.Item-Description{
-     margin-top: -0em;
-     font-size: 11px;
+
+.item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.avatar{
-     width: 2em;
+
+.item-lang {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--border);
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.details{
-     width: 100%;
-     font-size: 10px;
-     float: right;
-     text-align: right;
-     margin-right: 0.7em;
+
+.item-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+  margin: 0;
 }
-@media screen and (max-width: 1700px) {
-    .Item-Single{
-         width: 31.7%;
-    }
+
+.item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
-@media screen and (max-width: 1300px) {
-    .Item-Single{
-         width: 48%;
-    }
+
+.item-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 0;
 }
-/* On screens that are 992px or less, set the background color to blue */
-@media screen and (max-width: 992px) {
-    .Item-Single{
-         width: 48%;
-    }
-    .Item-Single:hover{
-         box-shadow: 0 15px 23px rgba(0,0,0,0.7);
-         transform: scale(1);
-    }
+
+.item-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
-@media screen and (max-width: 950px) {
-    .Item-Single{
-         width: 48%;
-    }
+
+.item-author span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-/* On screens that are 600px or less, set the background color to olive */
-@media screen and (max-width: 800px) {
-    .Item-Single{
-         width: 97%;
-    }
+
+.item-stats {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
 }
- 
+
+.item-stats span {
+  white-space: nowrap;
+}

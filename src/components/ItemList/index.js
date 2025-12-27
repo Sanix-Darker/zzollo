@@ -1,264 +1,185 @@
-import React, {
-  useReducer,
-  useEffect,
-  useMemo,
-  useCallback,
-  useState,
-  useRef,
-} from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import "./ItemList.css";
 import Item from "../Item";
 import Pagination from "../Pagination";
-import { linkSelector } from "../utils/js/Selectors";
 
-/* ------------------------------------------------------------------
- *  helpers
- * ----------------------------------------------------------------*/
-const parseGitItem = (elt, map) => ({
-  title: elt[map.name],
-  url: elt[map.html_url],
-  author: elt[map.author.split("|")[0]][map.author.split("|")[1]],
-  author_avatar:
-    elt[map.author_avatar.split("|")[0]][map.author_avatar.split("|")[1]],
-  stars: +elt[map.stars],
-  forks: +elt[map.forks],
-  issues: +elt[map.issues],
-  language: elt[map.language],
-  description: elt[map.description],
-});
-
-const parseGitlabItem = (elt, map) => {
-  const avatarPath =
-    elt[map.author_avatar.split("|")[0]][map.author_avatar.split("|")[1]];
-  const avatar =
-    !avatarPath || avatarPath.startsWith("http")
-      ? avatarPath || ""
-      : `https://gitlab.com${avatarPath}`;
-  return {
-    title: elt[map.name],
-    url: elt[map.html_url],
-    author: elt[map.author.split("|")[0]][map.author.split("|")[1]],
-    author_avatar: avatar,
-    stars: +elt[map.stars],
-    forks: +elt[map.forks],
-    issues: 0,
-    language: "-",
-    description: elt[map.description],
-  };
+const API_CONFIG = {
+  github: {
+    url: (q) => `https://api.github.com/search/repositories?q=${q}&per_page=100`,
+    parse: (data) => (data.items || []).map(item => ({
+      source: "github",
+      name: item.name,
+      url: item.html_url,
+      author: item.owner?.login,
+      avatar: item.owner?.avatar_url,
+      stars: item.stargazers_count || 0,
+      forks: item.forks || 0,
+      issues: item.open_issues || 0,
+      language: item.language || "",
+      description: item.description || "",
+    })),
+  },
+  gitlab: {
+    url: (q) => `https://gitlab.com/api/v4/projects?search=${q}&per_page=100`,
+    parse: (data) => (data || []).map(item => ({
+      source: "gitlab",
+      name: item.name,
+      url: item.web_url,
+      author: item.namespace?.name,
+      avatar: item.namespace?.avatar_url
+        ? (item.namespace.avatar_url.startsWith("http")
+            ? item.namespace.avatar_url
+            : `https://gitlab.com${item.namespace.avatar_url}`)
+        : "",
+      stars: item.star_count || 0,
+      forks: item.forks_count || 0,
+      issues: 0,
+      language: "",
+      description: item.description || "",
+    })),
+  },
+  bitbucket: {
+    url: (q) => `https://api.bitbucket.org/2.0/repositories/?q=name~"${q}"`,
+    parse: (data) => (data.values || []).map(item => ({
+      source: "bitbucket",
+      name: item.name,
+      url: item.links?.html?.href || "",
+      author: item.owner?.display_name,
+      avatar: item.owner?.links?.avatar?.href,
+      stars: 0,
+      forks: 0,
+      issues: 0,
+      language: item.language || "",
+      description: item.description || "",
+    })),
+  },
 };
 
-const byStarsDesc = (a, b) => b.stars - a.stars;
+const PAGE_SIZE = 12;
 
-/* ------------------------------------------------------------------
- *  reducer & initial state
- * ----------------------------------------------------------------*/
-const initialState = {
-  items: [],
-  loading: false,
-  error: null,
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "START_FETCH":
-      return { ...state, loading: true, error: null };
-    case "END_FETCH":
-      return { items: action.payload, loading: false, error: null };
-    case "ERROR":
-      return { ...state, loading: false, error: action.payload };
-    default:
-      return state;
-  }
-}
-
-/* ------------------------------------------------------------------
- *  component
- * ----------------------------------------------------------------*/
-export default function ItemList({
-  search,
-  go_search,
-  source: selectedSource,
-  language: selectedLanguage,
-  sort,
-  order,
-}) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [pageSize, setPageSize] = useState(12);
+function ItemList({ search, filters, shouldSearch, onSearchComplete }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const abortRef = useRef();
+  const [searched, setSearched] = useState(false);
 
-  /* -------------------- fetch logic -------------------- */
-  const buildItems = useCallback((src, data) => {
-    const map = linkSelector[src];
-    const arr = (src === "github") ? data.items : src === "bitbucket" ? data.values : data;
-    const parser = src === "gitlab" ? parseGitlabItem : parseGitItem;
-    return arr?.map((elt, idx) => ({
-      index: idx,
-      source: src,
-      ...parser(elt, map),
-    }));
+  const fetchFromSource = useCallback(async (source, query) => {
+    try {
+      const config = API_CONFIG[source];
+      const res = await fetch(config.url(encodeURIComponent(query)));
+      const data = await res.json();
+      return config.parse(data);
+    } catch (err) {
+      console.error(`Error fetching from ${source}:`, err);
+      return [];
+    }
   }, []);
 
-  const fetchProjects = useCallback(
-    async (term) => {
-      if (!term) return;
-      if (abortRef.current) abortRef.current.abort();
-      const controller = new AbortController();
-      abortRef.current = controller;
+  const fetchAll = useCallback(async (query) => {
+    setLoading(true);
+    setSearched(true);
+    setCurrentPage(1);
 
-      dispatch({ type: "START_FETCH" });
-      const q = term.toLowerCase();
+    const sources = filters.source === "all"
+      ? ["github", "gitlab", "bitbucket"]
+      : [filters.source];
 
-      try {
-        const requests = ["github", "gitlab", "bitbucket"].map((src) => {
-          const link =
-            linkSelector[src].link + q +
-            (src === "github" || src === "gitlab"
-              ? "&page=1&per_page=100"
-              : "");
-          return fetch(link, { signal: controller.signal })
-            .then((r) => r.json())
-            .then((data) => buildItems(src, data));
-        });
-        const results = (await Promise.all(requests)).flat();
-        results.sort(byStarsDesc);
-        dispatch({ type: "END_FETCH", payload: results });
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error(err);
-          dispatch({ type: "ERROR", payload: err });
-        }
-      }
-    },
-    [buildItems]
-  );
+    const results = await Promise.all(
+      sources.map(source => fetchFromSource(source, query))
+    );
 
-  /* trigger fetch on new search */
-  const prevSearchRef = useRef("");
+    const allItems = results.flat().sort((a, b) => b.stars - a.stars);
+    setItems(allItems);
+    setLoading(false);
+    onSearchComplete?.();
+  }, [filters.source, fetchFromSource, onSearchComplete]);
+
   useEffect(() => {
-    if (go_search && search && search !== prevSearchRef.current) {
-      prevSearchRef.current = search;
-      setCurrentPage(1); // reset pagination on new search
-      fetchProjects(search);
+    if (shouldSearch && search.trim()) {
+      fetchAll(search);
     }
-  }, [go_search, search, fetchProjects]);
+  }, [shouldSearch, search, fetchAll]);
 
-  /* -------------------- derived data -------------------- */
   const filteredItems = useMemo(() => {
-    let tmp = state.items;
+    let result = [...items];
 
-    if (selectedSource !== "all") {
-      tmp = tmp.filter(
-        (i) => i.source.toLowerCase() === selectedSource.toLowerCase()
+    // Filter by source (already done at fetch time if specific source)
+    if (filters.source !== "all") {
+      result = result.filter(i => i.source === filters.source);
+    }
+
+    // Filter by language
+    if (filters.language !== "all") {
+      result = result.filter(i =>
+        i.language?.toLowerCase() === filters.language.toLowerCase()
       );
     }
 
-    if (selectedLanguage !== "all") {
-      tmp = tmp.filter(
-        (i) => i?.language?.toLowerCase() === selectedLanguage.toLowerCase()
+    // Sort
+    if (filters.sort !== "all") {
+      const key = filters.sort === "star" ? "stars"
+                : filters.sort === "fork" ? "forks"
+                : "issues";
+      result.sort((a, b) =>
+        filters.order === "desc" ? b[key] - a[key] : a[key] - b[key]
       );
     }
 
-    if (sort !== "all") {
-      const key = sort === "star" ? "stars" : sort === "fork" ? "forks" : "issues";
-      const dir = order === "asc" ? 1 : -1;
-      tmp = [...tmp].sort((a, b) => (a[key] - b[key]) * dir);
-    }
+    return result;
+  }, [items, filters]);
 
-    return tmp;
-  }, [state.items, selectedSource, selectedLanguage, sort, order]);
+  const paginatedItems = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return filteredItems.slice(start, start + PAGE_SIZE);
+  }, [filteredItems, currentPage]);
 
-  const pageItems = useMemo(() => {
-    const first = (currentPage - 1) * pageSize;
-    return filteredItems.slice(first, first + pageSize);
-  }, [filteredItems, currentPage, pageSize]);
+  if (!searched) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">⌘</div>
+        <p>Enter a keyword to search open-source projects</p>
+      </div>
+    );
+  }
 
-  /* -------------------- render helpers -------------------- */
-  const renderItems = () => {
-    if (state.loading) {
-      return (
-        <div>
-          <br />
-          <img
-            src="/imgs/loading.gif"
-            style={{ maxWidth: "100%", width: "20em", borderRadius: "100%" }}
-            alt="loading"
-          />
-        </div>
-      );
-    }
+  if (loading) {
+    return (
+      <div className="loading-state">
+        <div className="spinner" />
+        <p>Searching...</p>
+      </div>
+    );
+  }
 
-    if (!pageItems.length) {
-      return (
-        <center>
-          <h1>No results found!</h1>
-        </center>
-      );
-    }
+  if (filteredItems.length === 0) {
+    return (
+      <div className="empty-state">
+        <div className="empty-icon">∅</div>
+        <p>No projects found</p>
+      </div>
+    );
+  }
 
-    return pageItems.map((elt, idx) => (
-      elt && <Item key={`${elt.source}-${idx}`} {...elt} />
-    ));
-  };
-
-  /* -------------------- component JSX -------------------- */
   return (
-    <div>
-      <center>
-        <div className="Item-List">
-          {filteredItems.length > 0 && (
-            <div style={{ width: "100%", textAlign: "center" }}>
-              <span>Found {filteredItems.length} results.</span>
-            </div>
-          )}
+    <div className="item-list">
+      <div className="results-count">
+        {filteredItems.length} project{filteredItems.length !== 1 ? "s" : ""} found
+      </div>
 
-          {/* status / items */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-around",
-            }}
-          >
-            {renderItems()}
-          </div>
+      <div className="items-grid">
+        {paginatedItems.map((item, index) => (
+          <Item key={`${item.source}-${item.name}-${index}`} {...item} />
+        ))}
+      </div>
 
-          {/* pagination */}
-          {filteredItems.length > pageSize && (
-            <Pagination
-              className="pagination-bar"
-              currentPage={currentPage}
-              totalCount={filteredItems.length}
-              pageSize={pageSize}
-              onPageChange={setCurrentPage}
-              onViewAll={setPageSize}
-            />
-          )}
-
-          {/* scroll‑to‑top */}
-          {filteredItems.length > 0 && (
-            <button
-              onClick={() =>
-                window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-              }
-              style={{
-                cursor: "pointer",
-                position: "fixed",
-                padding: "1rem 1.2rem",
-                border: "none",
-                fontSize: "11px",
-                bottom: "40px",
-                right: "40px",
-                backgroundColor: "grey",
-                color: "#fff",
-                zIndex: 20,
-              }}
-            >
-              Scroll to top
-            </button>
-          )}
-        </div>
-      </center>
+      <Pagination
+        currentPage={currentPage}
+        totalCount={filteredItems.length}
+        pageSize={PAGE_SIZE}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 }
+
+export default ItemList;

@@ -1,236 +1,146 @@
-import React, {
-  useReducer,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./App.css";
-import "./components/utils/css/grid.css";
 import ItemList from "./components/ItemList";
-import LanguagesOption from "./components/utils/js/LanguagesOption";
 
-// -------------------------- utils --------------------------
-const debounce = (fn, delay = 400) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), delay);
-  };
-};
+const SOURCES = [
+  { value: "all", label: "All Sources" },
+  { value: "github", label: "GitHub" },
+  { value: "gitlab", label: "GitLab" },
+  { value: "bitbucket", label: "Bitbucket" },
+];
 
-// ------------------------- reducer -------------------------
-const initialState = {
-  search: "",
-  source: "all",
-  language: "all",
-  sort: "all",
-  order: "all",
-  collapseFilters: false,
-  goSearch: false,
-};
+const LANGUAGES = [
+  "All", "JavaScript", "TypeScript", "Python", "Java", "C", "C++", "C#",
+  "Go", "Rust", "Ruby", "PHP", "Swift", "Kotlin", "Scala", "Shell",
+  "HTML", "CSS", "SQL", "R", "Dart", "Lua", "Perl", "Haskell", "Elixir"
+];
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "SET_SEARCH":
-      return { ...state, search: action.payload, goSearch: action.trigger };
-    case "SET_FILTER":
-      return { ...state, [action.key]: action.value, goSearch: true };
-    case "TOGGLE_COLLAPSE":
-      return { ...state, collapseFilters: !state.collapseFilters };
-    case "RESET_TRIGGER":
-      return { ...state, goSearch: false };
-    default:
-      return state;
-  }
-}
+const SORT_OPTIONS = [
+  { value: "all", label: "Best Match" },
+  { value: "star", label: "Stars" },
+  { value: "fork", label: "Forks" },
+  { value: "issue", label: "Issues" },
+];
 
-// --------------------------- app ---------------------------
-export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { search, source, language, sort, order, collapseFilters, goSearch } =
-    state;
+function App() {
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({
+    source: "all",
+    language: "all",
+    sort: "all",
+    order: "desc",
+  });
+  const [shouldSearch, setShouldSearch] = useState(false);
+  const inputRef = useRef();
 
-  const refText = useRef(null);
+  const updateFilter = useCallback((key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+    if (search.trim()) setShouldSearch(true);
+  }, [search]);
 
-  // focus search box on first render
-  useEffect(() => {
-    refText.current?.focus();
-  }, []);
+  const handleSearch = useCallback((e) => {
+    if (e.key === "Enter" && search.trim()) {
+      setShouldSearch(true);
+      window.history.replaceState(null, "", `?q=${encodeURIComponent(search)}`);
+    }
+  }, [search]);
 
-  // read ?q param only once on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const q = params.get("q");
-    if (q) dispatch({ type: "SET_SEARCH", payload: q, trigger: true });
+    if (q) {
+      setSearch(q);
+      setShouldSearch(true);
+    }
+    inputRef.current?.focus();
   }, []);
-
-  // update URL when we intentionally trigger a search
-  const syncUrl = useCallback(
-    debounce((value) => {
-      if (value) {
-        window.history.replaceState(null, "", `?q=${encodeURIComponent(value)}`);
-      } else {
-        window.history.replaceState(null, "", window.location.pathname);
-      }
-      dispatch({ type: "RESET_TRIGGER" });
-    }, 300),
-    []
-  );
-
-  useEffect(() => {
-    if (goSearch) syncUrl(search);
-  }, [goSearch, search, syncUrl]);
-
-  // -------------------- handlers --------------------
-  const handleSearch = useCallback(
-    (e) =>
-      dispatch({
-        type: "SET_SEARCH",
-        payload: e.target.value,
-        trigger: e.key === "Enter",
-      }),
-    []
-  );
-
-  const handleFilter = useCallback((e, key) => {
-    const value = e.target.value || "all";
-    dispatch({ type: "SET_FILTER", key, value });
-  }, []);
-
-  const toggleCollapse = useCallback(
-    () => dispatch({ type: "TOGGLE_COLLAPSE" }),
-    []
-  );
-
-  const linkStyleNone = useMemo(
-    () => ({ color: "white", textDecoration: "none" }),
-    []
-  );
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className="search-box">
-          <p className="head">
-            <a href="/" style={linkStyleNone}>
-              <code>Zz0ll0</code>
-            </a>
-            <small>
-              Search open-source projects on github / gitlab / bitbucket. &nbsp;
-            </small>
-            <b>
-              <a
-                href="https://github.com/sanix-darker/zolo"
-                style={linkStyleNone}
-              >
-                [Project-link]
-              </a>
-            </b>
-          </p>
+    <div className="app">
+      <header className="header">
+        <a href="/" className="logo">zzollo</a>
+        <p className="tagline">Search open-source projects across GitHub, GitLab & Bitbucket</p>
+      </header>
 
-          {/* ------------- search input ------------- */}
-          <div className="row">
-            <div className="col-md-12">
-              <input
-                type="text"
-                ref={refText}
-                value={search}
-                className="search-zone"
-                onChange={handleSearch}
-                onKeyUp={handleSearch}
-                onClick={toggleCollapse}
-                title="Click on the text box to show/hide other filters."
-                placeholder="Search keyword(s) for open-source project(s)..."
-              />
-            </div>
-          </div>
-
-          {/* ------------- filters ------------- */}
-          {collapseFilters && (
-            <div className="row">
-              <FilterColumn
-                id="source"
-                className="source-zone"
-                placeholder="From [Github / GitLab / Bitbucket]"
-                onChange={(e) => handleFilter(e, "source")}
-                options={[
-                  { value: "all", label: "From [Github / GitLab / Bitbucket]" },
-                  { value: "github", label: "https://github.com" },
-                  { value: "gitlab", label: "https://gitlab.com" },
-                  { value: "bitbucket", label: "https://bitbucket.org" },
-                ]}
-              />
-
-              <FilterColumn
-                id="languages"
-                className="language-zone"
-                placeholder="Filter by languages"
-                onChange={(e) => handleFilter(e, "language")}
-                options={LanguagesOption}
-              />
-
-              <FilterColumn
-                id="sort"
-                className="sort-zone"
-                placeholder="Filter By (Stars / Issues / Forks)"
-                onChange={(e) => handleFilter(e, "sort")}
-                options={[
-                  { value: "all", label: "Filter By (Stars / Issues / Forks)" },
-                  { value: "star", label: "Sort by Stars" },
-                  { value: "issue", label: "Sort by Issues" },
-                  { value: "fork", label: "Sort by Forks" },
-                ]}
-              />
-
-              <FilterColumn
-                id="order"
-                className="order-zone"
-                placeholder="Order (Ascending/Descending)"
-                onChange={(e) => handleFilter(e, "order")}
-                options={[
-                  { value: "all", label: "Order (Ascending/Descending)" },
-                  { value: "asc", label: "Ascending order" },
-                  { value: "desc", label: "Descending order" },
-                ]}
-              />
-            </div>
-          )}
+      <main className="main">
+        <div className="search-container">
+          <input
+            ref={inputRef}
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleSearch}
+            placeholder="Search projects..."
+            className="search-input"
+            aria-label="Search projects"
+          />
+          <button
+            className="search-btn"
+            onClick={() => search.trim() && setShouldSearch(true)}
+            aria-label="Search"
+          >
+            →
+          </button>
         </div>
 
-        {/* ------------- results ------------- */}
+        <div className="filters">
+          <select
+            value={filters.source}
+            onChange={(e) => updateFilter("source", e.target.value)}
+            className="filter-select"
+            aria-label="Filter by source"
+          >
+            {SOURCES.map(s => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
+          </select>
+
+          <select
+            value={filters.language}
+            onChange={(e) => updateFilter("language", e.target.value)}
+            className="filter-select"
+            aria-label="Filter by language"
+          >
+            {LANGUAGES.map(lang => (
+              <option key={lang} value={lang.toLowerCase()}>{lang}</option>
+            ))}
+          </select>
+
+          <select
+            value={filters.sort}
+            onChange={(e) => updateFilter("sort", e.target.value)}
+            className="filter-select"
+            aria-label="Sort by"
+          >
+            {SORT_OPTIONS.map(s => (
+              <option key={s.value} value={s.value}>{s.label}</option>
+            ))}
+          </select>
+
+          <button
+            className={`order-btn ${filters.order === "desc" ? "active" : ""}`}
+            onClick={() => updateFilter("order", filters.order === "desc" ? "asc" : "desc")}
+            aria-label={`Sort ${filters.order === "desc" ? "ascending" : "descending"}`}
+          >
+            {filters.order === "desc" ? "↓" : "↑"}
+          </button>
+        </div>
+
         <ItemList
           search={search}
-          source={source}
-          language={language}
-          sort={sort}
-          order={order}
-          go_search={goSearch}
+          filters={filters}
+          shouldSearch={shouldSearch}
+          onSearchComplete={() => setShouldSearch(false)}
         />
-      </header>
+      </main>
+
+      <footer className="footer">
+        <a href="https://github.com/sanix-darker/zzollo" target="_blank" rel="noopener noreferrer">
+          View on GitHub
+        </a>
+      </footer>
     </div>
   );
 }
 
-// ---------------------- FilterColumn ----------------------
-const FilterColumn = React.memo(
-  ({ id, placeholder, className, onChange, options = [], customOptions = null }) => (
-    <div className="col-md-3 zone">
-      <input
-        list={id}
-        className={className}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-      <datalist id={id}>
-        {customOptions
-          ? customOptions
-          : options.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-      </datalist>
-    </div>
-  )
-);
+export default App;

@@ -1,104 +1,75 @@
-import React, { useCallback } from "react";
-import classNames from "classnames";
-import { Paginate, DOTS } from "./paginate";
+import React, { useMemo } from "react";
 import "./pagination.css";
 
-/**
- * Hook‑safe, accessible pagination component
- */
-const Pagination = React.memo(function Pagination({
-  onPageChange,
-  onViewAll,
-  totalCount,
-  siblingCount = 1,
-  currentPage,
-  pageSize,
-  className,
-  showViewAll = true,
-}) {
-  /* ---------------------- derive range --------------------- */
-  const paginationRange = Paginate({
-    currentPage,
-    totalCount,
-    siblingCount,
-    pageSize,
-  });
+function Pagination({ currentPage, totalCount, pageSize, onPageChange }) {
+  const totalPages = Math.ceil(totalCount / pageSize);
 
-  const lastPage = paginationRange[paginationRange.length - 1];
+  const pages = useMemo(() => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
 
-  // early‑display check (hooks must come first!)
-  const hidePagination = currentPage === 0 || paginationRange.length < 2;
+    const items = [];
+    const showLeftDots = currentPage > 3;
+    const showRightDots = currentPage < totalPages - 2;
 
-  /* ---------------------- callbacks ------------------------ */
-  const handlePrev = useCallback(() => {
-    if (currentPage > 1) onPageChange(currentPage - 1);
-  }, [currentPage, onPageChange]);
+    if (!showLeftDots && showRightDots) {
+      for (let i = 1; i <= 5; i++) items.push(i);
+      items.push("...");
+      items.push(totalPages);
+    } else if (showLeftDots && !showRightDots) {
+      items.push(1);
+      items.push("...");
+      for (let i = totalPages - 4; i <= totalPages; i++) items.push(i);
+    } else {
+      items.push(1);
+      items.push("...");
+      for (let i = currentPage - 1; i <= currentPage + 1; i++) items.push(i);
+      items.push("...");
+      items.push(totalPages);
+    }
 
-  const handleNext = useCallback(() => {
-    if (currentPage < lastPage) onPageChange(currentPage + 1);
-  }, [currentPage, lastPage, onPageChange]);
+    return items;
+  }, [currentPage, totalPages]);
 
-  const handleViewAll = useCallback(
-    () => onViewAll(totalCount),
-    [onViewAll, totalCount]
-  );
+  if (totalPages <= 1) return null;
 
-  /* ---------------------- early exit ----------------------- */
-  if (hidePagination) return null;
-
-  /* ---------------------- render --------------------------- */
   return (
-    <div>
-      <ul className={classNames("pagination-container", className)}>
-        {/* prev */}
-        <li
-          className={classNames("pagination-item", { disabled: currentPage === 1 })}
-          onClick={handlePrev}
-        >
-          <span className="arrow left" />
-        </li>
+    <nav className="pagination" aria-label="Pagination">
+      <button
+        className="page-btn"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        aria-label="Previous page"
+      >
+        ←
+      </button>
 
-        {/* pages */}
-        {paginationRange.map((pageNumber, idx) =>
-          pageNumber === DOTS ? (
-            <li key={`dots-${idx}`} className="pagination-item dots">
-              &#8230;
-            </li>
-          ) : (
-            <li
-              key={pageNumber}
-              className={classNames("pagination-item", {
-                selected: pageNumber === currentPage,
-              })}
-              onClick={() => onPageChange(pageNumber)}
-            >
-              {pageNumber}
-            </li>
-          )
-        )}
-
-        {/* next */}
-        <li
-          className={classNames("pagination-item", { disabled: currentPage === lastPage })}
-          onClick={handleNext}
-        >
-          <span className="arrow right" />
-        </li>
-      </ul>
-
-      {/* view all */}
-      {showViewAll && (
-        <button
-          type="button"
-          title="Show all results on one page (may affect performance)"
-          className="button-get-all"
-          onClick={handleViewAll}
-        >
-          Toggle pagination
-        </button>
+      {pages.map((page, i) =>
+        page === "..." ? (
+          <span key={`dots-${i}`} className="page-dots">...</span>
+        ) : (
+          <button
+            key={page}
+            className={`page-btn ${page === currentPage ? "active" : ""}`}
+            onClick={() => onPageChange(page)}
+            aria-current={page === currentPage ? "page" : undefined}
+          >
+            {page}
+          </button>
+        )
       )}
-    </div>
+
+      <button
+        className="page-btn"
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        aria-label="Next page"
+      >
+        →
+      </button>
+    </nav>
   );
-});
+}
 
 export default Pagination;
